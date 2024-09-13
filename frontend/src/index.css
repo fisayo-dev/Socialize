@@ -33,7 +33,7 @@ body {
    @apply container  px-10 mx-auto;
 }
 
-input {
+input, select {
     outline: none;
     background-color: transparent;
 }
@@ -51,4 +51,36 @@ input:-moz-autofill {
 input:-ms-autofill {
     background-color: transparent !important;
     box-shadow: 0 0 0 1000px var(--app-bg-color) inset !important;
+}
+
+
+.focus-inp-text {
+    top: 0;
+    @apply w-full py-4;
+}
+
+.focus-up-text,.focus-inp-text  {
+    position: absolute;
+    left: 0;
+    z-index: 50;
+    pointer-events: none;
+    transition: 0.1s ease-in-out;
+    @apply font-bold;
+    background-color: var(--app-bg-color)
+}
+.focus-up-text {
+    @apply text-[0.9rem];
+    top: -15%;
+}
+
+.select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--app-bg-color);
+    cursor: pointer;
+}
+
+.select option {
+    background-color: var(--app-dark-bg-color);
 }
