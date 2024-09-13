@@ -7,7 +7,7 @@ const port = process.env.PORT || 7000;
 
 // Sample API route
 app.get('/api', (req, res) => {
-  res.json({ message: "Hello from the Node.js backend!" });
+  res.json({ message: "Where Connections Spark and Conversations Thrive!" });
 });
 
 app.listen(port, () => {
