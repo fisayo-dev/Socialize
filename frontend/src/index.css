@@ -30,5 +30,25 @@ body {
 }
 
 .app-container {
-   @apply max-w-6xl px-10 mx-auto;
+   @apply container  px-10 mx-auto;
+}
+
+input {
+    outline: none;
+    background-color: transparent;
+}
+
+input:-webkit-autofill {
+    background-color: transparent !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--app-bg-color) inset !important;
+}
+
+input:-moz-autofill {
+    background-color: transparent !important;
+    box-shadow: 0 0 0 1000px var(--app-bg-color) inset !important;
+}
+
+input:-ms-autofill {
+    background-color: transparent !important;
+    box-shadow: 0 0 0 1000px var(--app-bg-color) inset !important;
 }
