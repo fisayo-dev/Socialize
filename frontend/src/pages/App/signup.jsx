@@ -13,6 +13,9 @@ const Signup = () => {
   const [errorInputIndex1, setErrorInputIndex1] = useState(
     Array(labels1.length).fill(false)
   );
+  const [errorInputIndex2, setErrorInputIndex2] = useState(
+    Array(labels2.length).fill(false)
+  );
 
   // Create an array of refs for each input
   const inputRefs = Array.from({ length: labels1.length }, () => useRef(null));
@@ -68,7 +71,14 @@ const Signup = () => {
         hasError = true;
       } else {
         currentErrors[index] = false; // No error if filled
-        setCurrentPageIndex(1)
+        setCurrentPageIndex(1);
+      }
+
+      if (currentPageIndex == 1) {
+        setCurrentPageIndex(2);
+      }
+      if (currentPageIndex == 2) {
+        setCurrentPageIndex(3);
       }
     });
 
@@ -182,6 +192,48 @@ const Signup = () => {
                 </div>
               )}
 
+              {currentPageIndex == 3 &&
+                labels2.map((label, index) => (
+                  <div key={index} className="grid gap-5">
+                    <div
+                      key={index}
+                      className={`relative flex gap-5 ${
+                        focusedInputIndexes2[index]
+                          ? "border-slate-200"
+                          : "border-slate-500"
+                      } border-b-2 items-center text-[1rem] md:text-[1.12rem]`}
+                    >
+                      <h2
+                        className={`${
+                          focusedInputIndexes2[index]
+                            ? "focus-up-text"
+                            : "focus-inp-text"
+                        }`}
+                      >
+                        {label}
+                      </h2>
+                      <input
+                        type={getInputType(label)}
+                        className={`w-full py-4 `}
+                        ref={inputRefs2[index]}
+                        onFocus={() => handleInputFocus(index)}
+                        onChange={(e) => {
+                          const current = [...errorInputIndex2];
+                          if (e.target.value.trim() === "") {
+                            current[index] = true;
+                            setErrorInputIndex2(current);
+                          } else {
+                            current[index] = false;
+                            setErrorInputIndex2(current);
+                          }
+                        }}
+                      />
+                    </div>
+                    {errorInputIndex2[index] && (
+                      <p className="text-red-300">This field cannot be empty</p>
+                    )}
+                  </div>
+                ))}
               <div className="grid gap-5 py-5 items-center">
                 <Button onClick={handleNextClick}>Next</Button>
               </div>
