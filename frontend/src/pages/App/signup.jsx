@@ -39,6 +39,19 @@ const Signup = () => {
     setFocusedInputIndexes2(newFocusStates2);
   };
 
+  const getFormHeaderTag = () => {
+    switch (currentPageIndex) {
+      case 0:
+        return "Let's get to know you ?"
+      case 1:
+        return "What's your gender ?"
+      case 2:
+        return "Where do you stay ?"
+      case 3:
+        return "We want to recognize you"
+    }
+  }
+
   // Function to handle clicks outside each input and blur it
   const handleClickOutside = (event) => {
     const newFocusStates = [...focusedInputIndexes];
@@ -159,9 +172,9 @@ const Signup = () => {
       </Link>
       <div className="w-full mx-auto">
         <div className="grid py-5">
-          <div className="grid gap-5 ">
+          <div className="grid gap-10 ">
             <h2 className="text-center text-4xl font-bold">
-              Let's get to know you ?
+              {getFormHeaderTag()}
             </h2>
             <form
               name="signup_form"
