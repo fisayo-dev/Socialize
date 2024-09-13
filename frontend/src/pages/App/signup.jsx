@@ -9,6 +9,8 @@ const Signup = () => {
 
   const labels2 = ["Email Address", "Password", "Confirm Password"];
 
+  const [errorInputIndex1, setErrorInputIndex1] = useState(Array(labels1.length).fill(false));
+
   // Create an array of refs for each input
   const inputRefs = Array.from({ length: labels1.length }, () => useRef(null));
   const [focusedInputIndexes, setFocusedInputIndexes] = useState(
@@ -75,8 +77,8 @@ const Signup = () => {
               id="signup_form"
               className="w-full grid gap-6 md:w-2/4 mx-auto"
             >
-              {/* {labels1.map((label, index) => (
-                <div className="grid gap-1">
+              {labels1.map((label, index) => (
+                <div key={index} className="grid gap-1">
                   <div
                     key={index}
                     className={`relative flex gap-5 ${
@@ -99,15 +101,25 @@ const Signup = () => {
                       className={`w-full py-4 `}
                       ref={inputRefs[index]}
                       onFocus={() => handleInputFocus(index)}
+                      onChange={(e) => {
+                        const current = [...errorInputIndex1]
+                        if (e.target.value.trim() == '') {
+                          current[index] = true
+                          setErrorInputIndex1(current)
+                        } else {
+                          current[index] = false
+                          setErrorInputIndex1(current)
+                        }
+                      }}
                     />
                   </div>
-                  {focusedInputIndexes[index] && (
+                  {errorInputIndex1[index] && (
                     <p>This field cannot be empty</p>
                   )}
                 </div>
-              ))} */}
+              ))}
 
-              <div className="grid gap-5">
+              {/* <div className="grid gap-5">
                 <div
                   className='relative flex gap-5 
                   items-center text-[1rem] md:text-[1.12rem]'
@@ -118,7 +130,7 @@ const Signup = () => {
                     <option value="">Others</option>
                   </select>
                 </div>
-              </div>
+              </div> */}
               <div className="grid gap-5 py-5 items-center">
                 <Button styles="">Next</Button>
               </div>
