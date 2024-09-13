@@ -1,10 +1,12 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
+
 const PORT = 5000;
 
 // Sample API route
 app.get('/api', (req, res) => {
-  res.json({ message: "Hello from a Node.js backend!" });
+  res.json({ message: "Hello from the Node.js backend!" });
 });
 
 app.listen(PORT, () => {
