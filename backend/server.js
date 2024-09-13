@@ -2,13 +2,14 @@ import express from 'express';
 
 const app = express();
 
-const PORT = 5000;
+const port = process.env.PORT || 7000;
+
 
 // Sample API route
 app.get('/api', (req, res) => {
   res.json({ message: "Hello from the Node.js backend!" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

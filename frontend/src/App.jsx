@@ -11,14 +11,9 @@ function App() {
   const [message, setMessage] = useState("");
 
   const fetchMainText = async () => {
-    try {
-      const res = await fetch("/api"); // Make the request to the backend
-      const { message } = await res.json();
-      setMessage(message);
-      fetchMainText(); //Long-pulling logic
-    } catch (error) {
-      console.error(error)
-    }
+    const res = await fetch("/api"); // Make the request to the backend
+    const data = await res.json();
+    setMessage(data.message);
   };
   useEffect(() => {
     fetchMainText();
