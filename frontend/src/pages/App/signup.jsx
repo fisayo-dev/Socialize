@@ -6,16 +6,18 @@ import { useState, useEffect } from "react";
 const Signup = () => {
   // Array of labels for each input field
   const labels1 = ["First Name ", "Last Name", "Middle Name"];
-
   const labels2 = ["Email Address", "Password", "Confirm Password"];
 
-  const [errorInputIndex1, setErrorInputIndex1] = useState(Array(labels1.length).fill(false));
+  const [errorInputIndex1, setErrorInputIndex1] = useState(
+    Array(labels1.length).fill(false)
+  );
 
   // Create an array of refs for each input
   const inputRefs = Array.from({ length: labels1.length }, () => useRef(null));
   const [focusedInputIndexes, setFocusedInputIndexes] = useState(
     Array(labels1.length).fill(false)
   ); // Track focus for each input separately
+
   const inputRefs2 = Array.from({ length: labels1.length }, () => useRef(null));
   const [focusedInputIndexes2, setFocusedInputIndexes2] = useState(
     Array(labels2.length).fill(false)
@@ -32,8 +34,13 @@ const Signup = () => {
   const handleClickOutside = (event) => {
     const newFocusStates = [...focusedInputIndexes];
     inputRefs.forEach((inputRef, index) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
-        newFocusStates[index] = false; // Blur only the clicked outside input
+      // Prevent blur if input is filled
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target) &&
+        inputRef.current.value.trim() === ""
+      ) {
+        newFocusStates[index] = false; // Blur only if input is empty
       }
     });
     setFocusedInputIndexes(newFocusStates);
@@ -47,17 +54,42 @@ const Signup = () => {
     };
   }, [focusedInputIndexes]);
 
+  // Function to validate inputs on clicking "Next"
+  const handleNextClick = (e) => {
+    e.preventDefault();
+    const currentErrors = [...errorInputIndex1];
+    let hasError = false;
+
+    inputRefs.forEach((inputRef, index) => {
+      if (inputRef.current && inputRef.current.value.trim() === "") {
+        currentErrors[index] = true; // Mark error for empty input
+        hasError = true;
+      } else {
+        currentErrors[index] = false; // No error if filled
+      }
+    });
+
+    setErrorInputIndex1(currentErrors);
+
+    // Proceed if there are no errors
+    if (!hasError) {
+      console.log("All inputs are filled. Proceed to the next step.");
+      // You can add your next step logic here
+    }
+  };
+
   const getInputType = (label) => {
     let correctInputType = "";
-    if (label == "Password" || label == "Confirm Password") {
+    if (label === "Password" || label === "Confirm Password") {
       correctInputType = "password";
-    } else if (label == "Email Address") {
+    } else if (label === "Email Address") {
       correctInputType = "email";
-    } else if (label == "age") {
+    } else if (label === "age") {
       correctInputType = "number";
     }
     return correctInputType;
   };
+
   return (
     <div className="app-container">
       <Link
@@ -78,7 +110,7 @@ const Signup = () => {
               className="w-full grid gap-6 md:w-2/4 mx-auto"
             >
               {labels1.map((label, index) => (
-                <div key={index} className="grid gap-1">
+                <div key={index} className="grid gap-5">
                   <div
                     key={index}
                     className={`relative flex gap-5 ${
@@ -102,37 +134,27 @@ const Signup = () => {
                       ref={inputRefs[index]}
                       onFocus={() => handleInputFocus(index)}
                       onChange={(e) => {
-                        const current = [...errorInputIndex1]
-                        if (e.target.value.trim() == '') {
-                          current[index] = true
-                          setErrorInputIndex1(current)
+                        const current = [...errorInputIndex1];
+                        if (e.target.value.trim() === "") {
+                          current[index] = true;
+                          setErrorInputIndex1(current);
                         } else {
-                          current[index] = false
-                          setErrorInputIndex1(current)
+                          current[index] = false;
+                          setErrorInputIndex1(current);
                         }
                       }}
                     />
                   </div>
                   {errorInputIndex1[index] && (
-                    <p>This field cannot be empty</p>
+                    <p className="text-red-300">This field cannot be empty</p>
                   )}
                 </div>
               ))}
 
-              {/* <div className="grid gap-5">
-                <div
-                  className='relative flex gap-5 
-                  items-center text-[1rem] md:text-[1.12rem]'
-                >
-                  <select className="select font-bold w-full border-2 rounded-lg border-slate-200 p-3 ">
-                    <option value="">Male</option>
-                    <option value="">Female</option>
-                    <option value="">Others</option>
-                  </select>
-                </div>
-              </div> */}
               <div className="grid gap-5 py-5 items-center">
-                <Button styles="">Next</Button>
+                <Button onClick={handleNextClick}>
+                  Next
+                </Button>
               </div>
             </form>
           </div>
