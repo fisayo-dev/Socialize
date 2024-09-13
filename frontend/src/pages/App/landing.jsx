@@ -1,4 +1,5 @@
 import { Button, Header, Footer } from "../../components";
+import { Link } from "react-router-dom";
 
 const Landing = ({message=''}) => {
   return (
@@ -14,9 +15,9 @@ const Landing = ({message=''}) => {
             <p className="text-1xl">
               Get in touch with your friends and families from any distance.
             </p>
-            <div>
+            <Link to="/signup">
               <Button styles="app-dark-text-color ">Get Started</Button>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
