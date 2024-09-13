@@ -8,6 +8,8 @@ const Signup = () => {
   const labels1 = ["First Name ", "Last Name", "Middle Name"];
   const labels2 = ["Email Address", "Password", "Confirm Password"];
 
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
   const [errorInputIndex1, setErrorInputIndex1] = useState(
     Array(labels1.length).fill(false)
   );
@@ -66,6 +68,7 @@ const Signup = () => {
         hasError = true;
       } else {
         currentErrors[index] = false; // No error if filled
+        setCurrentPageIndex(1)
       }
     });
 
@@ -109,52 +112,78 @@ const Signup = () => {
               id="signup_form"
               className="w-full grid gap-6 md:w-2/4 mx-auto"
             >
-              {labels1.map((label, index) => (
-                <div key={index} className="grid gap-5">
-                  <div
-                    key={index}
-                    className={`relative flex gap-5 ${
-                      focusedInputIndexes[index]
-                        ? "border-slate-200"
-                        : "border-slate-500"
-                    } border-b-2 items-center text-[1rem] md:text-[1.12rem]`}
-                  >
-                    <h2
-                      className={`${
+              {currentPageIndex == 0 &&
+                labels1.map((label, index) => (
+                  <div key={index} className="grid gap-5">
+                    <div
+                      key={index}
+                      className={`relative flex gap-5 ${
                         focusedInputIndexes[index]
-                          ? "focus-up-text"
-                          : "focus-inp-text"
-                      }`}
+                          ? "border-slate-200"
+                          : "border-slate-500"
+                      } border-b-2 items-center text-[1rem] md:text-[1.12rem]`}
                     >
-                      {label}
-                    </h2>
-                    <input
-                      type={getInputType(label)}
-                      className={`w-full py-4 `}
-                      ref={inputRefs[index]}
-                      onFocus={() => handleInputFocus(index)}
-                      onChange={(e) => {
-                        const current = [...errorInputIndex1];
-                        if (e.target.value.trim() === "") {
-                          current[index] = true;
-                          setErrorInputIndex1(current);
-                        } else {
-                          current[index] = false;
-                          setErrorInputIndex1(current);
-                        }
-                      }}
-                    />
+                      <h2
+                        className={`${
+                          focusedInputIndexes[index]
+                            ? "focus-up-text"
+                            : "focus-inp-text"
+                        }`}
+                      >
+                        {label}
+                      </h2>
+                      <input
+                        type={getInputType(label)}
+                        className={`w-full py-4 `}
+                        ref={inputRefs[index]}
+                        onFocus={() => handleInputFocus(index)}
+                        onChange={(e) => {
+                          const current = [...errorInputIndex1];
+                          if (e.target.value.trim() === "") {
+                            current[index] = true;
+                            setErrorInputIndex1(current);
+                          } else {
+                            current[index] = false;
+                            setErrorInputIndex1(current);
+                          }
+                        }}
+                      />
+                    </div>
+                    {errorInputIndex1[index] && (
+                      <p className="text-red-300">This field cannot be empty</p>
+                    )}
                   </div>
-                  {errorInputIndex1[index] && (
-                    <p className="text-red-300">This field cannot be empty</p>
-                  )}
+                ))}
+
+              {currentPageIndex == 1 && (
+                <div
+                  className="relative flex gap-5 
+                  items-center text-[1rem] md:text-[1.12rem]"
+                >
+                  <select className="select font-bold w-full border-2 rounded-lg border-slate-200 p-3 ">
+                    <option value="">Male</option>
+                    <option value="">Female</option>
+                    <option value="">Others</option>
+                  </select>
                 </div>
-              ))}
+              )}
+              {currentPageIndex == 2 && (
+                <div
+                  className="relative flex gap-5 
+                items-center text-[1rem] md:text-[1.12rem]"
+                >
+                  <select className="select font-bold w-full border-2 rounded-lg border-slate-200 p-3 ">
+                    <option value="">Nigeria</option>
+                    <option value="">Ukraine</option>
+                    <option value="">Russia</option>
+                    <option value="">Ghana</option>
+                    <option value="">Liberia</option>
+                  </select>
+                </div>
+              )}
 
               <div className="grid gap-5 py-5 items-center">
-                <Button onClick={handleNextClick}>
-                  Next
-                </Button>
+                <Button onClick={handleNextClick}>Next</Button>
               </div>
             </form>
           </div>
