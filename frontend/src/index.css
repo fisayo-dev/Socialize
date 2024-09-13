@@ -77,10 +77,7 @@ input:-ms-autofill {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+
     background-color: var(--app-bg-color);
     cursor: pointer;
-}
-
-.select option {
-    background-color: var(--app-dark-bg-color);
 }
