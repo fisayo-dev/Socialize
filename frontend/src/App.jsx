@@ -4,18 +4,25 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Landing } from "./pages/App";
 import { PageNotFound } from "./pages";
 function App() {
   const [message, setMessage] = useState("");
 
+  const fetchMainText = async () => {
+    try {
+      const res = await fetch("/api"); // Make the request to the backend
+      const { message } = await res.json();
+      setMessage(message);
+      fetchMainText(); //Long-pulling logic
+    } catch (error) {
+      console.error(error)
+    }
+  };
   useEffect(() => {
-    fetch("/api") // Make the request to the backend
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((err) => console.log(err));
-  },[]);
+    fetchMainText();
+  }, []);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
