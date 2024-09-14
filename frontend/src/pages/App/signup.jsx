@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa6";
 
 const Signup = () => {
+  const currentYEAR = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -21,6 +22,17 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("--Select Gender--");
+
+  // Field status state
+  const [emailStatus, setEmailStatus] = useState(false);
+  const [firstNameStatus, setFirstNameStatus] = useState(false);
+  const [lastNameStatus, setLastNameStatus] = useState(false);
+  const [middleNameStatus, setMiddleNameStatus] = useState(false);
+  const [dateOfBirthStatus, setDateOfBirthStatus] = useState(false);
+  const [countryStatus, setCountryStatus] = useState(false);
+  const [passwordStatus, setPasswordStatus] = useState(false);
+  const [confirmPasswordStatus, setConfirmPasswordStatus] = useState(false);
+  const [genderStatus, setGenderStatus] = useState(false);
 
   const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
@@ -43,9 +55,9 @@ const Signup = () => {
   const checkInputFilledPhase1 = () => {
     let status = false;
     if (
-      firstName.trim() !== "" &&
-      lastName.trim() !== "" &&
-      middleName.trim() !== ""
+      gender !== "--Select Gender--" &&
+      new Date(dateOfBirth).getFullYear() < currentYEAR - 2 &&
+      country !== "--Select Country--"
     ) {
       status = true;
     }
@@ -87,14 +99,6 @@ const Signup = () => {
     }
   };
 
-  const checkFieldInputError = (fieldValue) => {
-    let status = false;
-    if (fieldValue.trim() == "") {
-      status = true;
-    }
-    return status;
-  };
-
   const handlePrevClick = (e) => {
     e.preventDefault();
     setFormPhase((prev) => prev - 1);
@@ -127,36 +131,68 @@ const Signup = () => {
                         placeholder="First Name"
                         value={firstName}
                         onChange={(e) => {
+                          {
+                            e.target.value.trim() == ""
+                              ? setFirstNameStatus(true)
+                              : setFirstNameStatus(false);
+                          }
                           setFirstName(e.target.value);
-                          checkFieldInputError(firstName);
                         }}
                       />
                     </div>
-                    {checkFieldInputError(firstName) && (
+                    {firstNameStatus && (
                       <p className="text-sm text-red-400">
                         Filled cannot be empty
                       </p>
                     )}
                   </div>
-                  <div className="form-styles">
-                    <FaUser />
-                    <input
-                      className="w-full"
-                      type="text"
-                      placeholder="Middle Name"
-                      value={middleName}
-                      onChange={(e) => setMiddleName(e.target.value)}
-                    />
+                  <div className="grid-gap-2">
+                    <div className="form-styles">
+                      <FaUser />
+                      <input
+                        className="w-full"
+                        type="text"
+                        placeholder="Middle Name"
+                        value={middleName}
+                        onChange={(e) => {
+                          {
+                            e.target.value.trim() == ""
+                              ? setMiddleNameStatus(true)
+                              : setMiddleNameStatus(false);
+                          }
+                          setMiddleName(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {middleNameStatus && (
+                      <p className="text-sm text-red-400">
+                        Filled cannot be empty
+                      </p>
+                    )}
                   </div>
-                  <div className="form-styles">
-                    <FaUser />
-                    <input
-                      className="w-full"
-                      type="text"
-                      placeholder="Last Name"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                    />
+                  <div className="grid-gap-2">
+                    <div className="form-styles">
+                      <FaUser />
+                      <input
+                        className="w-full"
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChange={(e) => {
+                          {
+                            e.target.value.trim() == ""
+                              ? setLastNameStatus(true)
+                              : setLastNameStatus(false);
+                          }
+                          setLastName(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {lastNameStatus && (
+                      <p className="text-sm text-red-400">
+                        Filled cannot be empty
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
