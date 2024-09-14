@@ -56,7 +56,6 @@ const Signup = () => {
     let status = false;
     if (
       gender !== "--Select Gender--" &&
-      new Date(dateOfBirth).getFullYear() < currentYEAR - 2 &&
       country !== "--Select Country--"
     ) {
       status = true;
