@@ -9,6 +9,8 @@ import {
   FaKey,
   FaGlobe,
   FaCalendar,
+  FaEye,
+  FaEyeSlash,
 } from "react-icons/fa6";
 
 const Signup = () => {
@@ -26,6 +28,8 @@ const Signup = () => {
 
   // Field status state
   const [firstNameStatus, setFirstNameStatus] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [lastNameStatus, setLastNameStatus] = useState(false);
   const [middleNameStatus, setMiddleNameStatus] = useState(false);
   const [dateOfBirthStatus, setDateOfBirthStatus] = useState(false);
@@ -35,7 +39,7 @@ const Signup = () => {
   const [passwordStatus, setPasswordStatus] = useState(false);
   const [confirmPasswordStatus, setConfirmPasswordStatus] = useState(false);
 
-  const [formPhase, setFormPhase] = useState(0);
+  const [formPhase, setFormPhase] = useState(3);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
 
   function setFormReadyToNext() {
@@ -373,7 +377,7 @@ const Signup = () => {
                       <FaKey />
                       <input
                         className="w-full"
-                        type="password"
+                        type={showPassword ? 'text': 'password'}
                         placeholder="Password"
                         value={password}
                         onChange={(e) => {
@@ -384,6 +388,7 @@ const Signup = () => {
                           setPassword(e.target.value);
                         }}
                       />
+                      <div className="cursor-pointer" onClick={() => setShowPassword((prev) => !prev)}>{showPassword ? <FaEye /> : <FaEyeSlash />}</div>
                     </div>
                     {passwordStatus && (
                       <p className="text-sm text-red-400">
@@ -398,7 +403,7 @@ const Signup = () => {
                       <FaKey />
                       <input
                         className="w-full"
-                        type="password"
+                        type={showConfirmPassword ? 'text': 'password'}
                         placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => {
@@ -408,6 +413,7 @@ const Signup = () => {
                           setConfirmPassword(e.target.value);
                         }}
                       />
+                         <div className="cursor-pointer" onClick={() => setShowConfirmPassword((prev) => !prev)}>{showConfirmPassword ? <FaEye /> : <FaEyeSlash />}</div>
                     </div>
                     {confirmPasswordStatus && (
                       <p className="text-sm text-red-400">
@@ -422,7 +428,7 @@ const Signup = () => {
                   <Button onClick={handlePrevClick}>Previous</Button>
                 )}
                 <Button disabled={nextButtonDisabled} onClick={handleNextClick}>
-                 {formPhase == 4 ? 'Done': 'Next'}
+                  {formPhase == 4 ? "Done" : "Next"}
                 </Button>
               </div>
             </form>
