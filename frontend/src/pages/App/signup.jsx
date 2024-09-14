@@ -65,12 +65,19 @@ const Signup = () => {
   };
   const checkInputFilledPhase2 = () => {
     let status = false;
-    if (email.trim() !== "" && password.trim() !== "") {
+    if (new Date(dateOfBirth).getFullYear() < currentYEAR - 2) {
       status = true;
     }
     return status;
   };
   const checkInputFilledPhase3 = () => {
+    let status = false;
+    if (email.trim() !== "" && password.trim() !== "") {
+      status = true;
+    }
+    return status;
+  };
+  const checkInputFilledPhase4 = () => {
     let status = false;
     if (password === confirmPassword) {
       status = true;
@@ -95,6 +102,9 @@ const Signup = () => {
       setNextButtonDisabled(true);
     }
     if (formPhase == 3 && checkInputFilledPhase3()) {
+      setNextButtonDisabled(true);
+    }
+    if (formPhase == 4 && checkInputFilledPhase4()) {
       submitForm();
     }
   };
@@ -196,18 +206,6 @@ const Signup = () => {
                   </div>
                 </div>
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
-                  <div className="grid-gap-2">
-                    <div className="form-styles">
-                      <FaCalendar />
-                      <input
-                        className="w-full"
-                        type="date"
-                        placeholder="Last Name"
-                        value={dateOfBirth}
-                        onChange={(e) => setDateOfBirth(e.target.value)}
-                      />
-                    </div>
-                  </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
                       <FaPerson />
@@ -217,7 +215,12 @@ const Signup = () => {
                         placeholder="--Select Gender--"
                         className="select w-full"
                         value={gender}
-                        onChange={(e) => setGender(e.target.value)}
+                        onChange={(e) => {
+                          e.target.value == "--Select Gender--"
+                            ? setGenderStatus(true)
+                            : setGenderStatus(false);
+                          setGender(e.target.value);
+                        }}
                       >
                         <option value="--Select Gender--">
                           --Select Gender--
@@ -227,6 +230,9 @@ const Signup = () => {
                         <option value="Others">Others</option>
                       </select>
                     </div>
+                    {genderStatus && (
+                      <p className="text-sm text-red-400">Select a Gender</p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
@@ -235,7 +241,12 @@ const Signup = () => {
                         name=""
                         id=""
                         value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        onChange={(e) => {
+                          e.target.value == "--Select Country--"
+                            ? setCountryStatus(true)
+                            : setCountryStatus(false);
+                          setCountry(e.target.value);
+                        }}
                         className="select w-full"
                       >
                         <option value="--Select Country">
@@ -246,10 +257,39 @@ const Signup = () => {
                         <option value="Chad">Chad</option>
                       </select>
                     </div>
+                    {countryStatus && (
+                      <p className="text-sm text-red-400">
+                        Select your country!
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className={`${formPhase == 2 ? "grid gap-5" : "hidden"}`}>
+                  <div className="grid-gap-2">
+                    <div className="form-styles">
+                      <FaCalendar />
+                      <input
+                        className="w-full"
+                        type="date"
+                        placeholder="Last Name"
+                        value={dateOfBirth}
+                        onChange={(e) => {
+                          new Date(dateOfBirth).getFullYear() < currentYEAR - 2
+                            ? setDateOfBirthStatus(false)
+                            : setDateOfBirthStatus(true);
+                          setDateOfBirth(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {dateOfBirthStatus && (
+                      <p className="text-sm text-red-400">
+                        You are too young!!
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className={`${formPhase == 2 ? "grid gap-5" : "hidden"}`}>
+                <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
                   <div className="form-styles">
                     <FaEnvelope />
                     <input
@@ -271,7 +311,7 @@ const Signup = () => {
                     />
                   </div>
                 </div>
-                <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
+                <div className={`${formPhase == 4 ? "grid gap-5" : "hidden"}`}>
                   <div className="form-styles">
                     <FaKey />
                     <input
