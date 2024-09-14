@@ -106,7 +106,9 @@ const Signup = () => {
       setNextButtonDisabled(true);
     }
     if (formPhase == 3 && checkInputFilledPhase3()) {
-      setNextButtonDisabled(true);
+      setFormReadyToNext();
+    } else {
+      setNextButtonDisabled(true)
     }
     if (formPhase == 4 && checkInputFilledPhase4()) {
       submitForm();
@@ -347,7 +349,7 @@ const Signup = () => {
                         placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => {
-                          e.target.value.trim() == ""
+                          e.target.value.trim() !== password
                             ? setConfirmPasswordStatus(true)
                             : setConfirmPasswordStatus(false);
                           setConfirmPassword(e.target.value)
@@ -355,7 +357,7 @@ const Signup = () => {
                       />
                     </div>
                     {confirmPasswordStatus && (
-                      <p className="text-sm text-red-400">Fill in a password</p>
+                      <p className="text-sm text-red-400">Passwords don't match</p>
                     )}
                   </div>
                 </div>
