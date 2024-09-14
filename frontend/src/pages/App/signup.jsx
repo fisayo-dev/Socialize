@@ -32,15 +32,46 @@ const Signup = () => {
   const checkInputFilledPhase0 = () => {
     let status = false;
     if (
-      firstName.trim() == "" ||
-      lastName.trim() == "" ||
-      middleName.trim() == ""
+      firstName.trim() !== "" ||
+      lastName.trim() !== "" ||
+      middleName.trim() !== ""
     ) {
       status = true;
     }
     return status;
   };
-  const handleNextClick = () => {
+  const checkInputFilledPhase1 = () => {
+    let status = false;
+    if (
+      firstName.trim() !== "" ||
+      lastName.trim() !== "" ||
+      middleName.trim() !== ""
+    ) {
+      status = true;
+    }
+    return status;
+  };
+  const checkInputFilledPhase2 = () => {
+    let status = false;
+    if (
+      email.trim() !== "" ||
+      password.trim() !== ""
+    ) {
+      status = true;
+    }
+    return status;
+  };
+  const checkInputFilledPhase3 = () => {
+    let status = false;
+    if (
+      password === confirmPassword
+    ) {
+      status = true;
+    }
+    return status;
+  };
+  const handleNextClick = (e) => {
+    e.preventDefault();
     if (formPhase == 0 && checkInputFilledPhase0()) {
       setFormReadyToNext();
     } else {
@@ -78,7 +109,7 @@ const Signup = () => {
               className="w-full grid gap-6 md:w-2/4 mx-auto"
             >
               <div className="grid ">
-                <di className={`${formPhase == 0 ? "grid gap-5" : "hidden"}`}>
+                <div className={`${formPhase == 0 ? "grid gap-5" : "hidden"}`}>
                   <div className="form-styles">
                     <FaUserLarge />
                     <input
@@ -109,7 +140,7 @@ const Signup = () => {
                       onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
-                </di>
+                </div>
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
                   <div className="form-styles">
                     <FaCalendar />
@@ -193,8 +224,8 @@ const Signup = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid py-5 items-center ml-auto w-full">
-                <Button>Next</Button>
+              <div disabled={nextButtonDisabled} className="disabled:bg-gray-500 disabled:cursor-not-allowed grid py-5 items-center ml-auto w-full">
+                <Button onClick={handleNextClick}>Next</Button>
               </div>
             </form>
           </div>
