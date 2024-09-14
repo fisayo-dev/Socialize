@@ -39,7 +39,7 @@ const Signup = () => {
   const [passwordStatus, setPasswordStatus] = useState(false);
   const [confirmPasswordStatus, setConfirmPasswordStatus] = useState(false);
 
-  const [formPhase, setFormPhase] = useState(3);
+  const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
 
   function setFormReadyToNext() {
