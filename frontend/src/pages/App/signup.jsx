@@ -174,7 +174,7 @@ const Signup = () => {
                     </div>
                     {firstNameStatus && (
                       <p className="text-sm text-red-400">
-                        Filled cannot be empty
+                        Provide a first name
                       </p>
                     )}
                   </div>
@@ -198,7 +198,7 @@ const Signup = () => {
                     </div>
                     {middleNameStatus && (
                       <p className="text-sm text-red-400">
-                        Filled cannot be empty
+                        Provide a middle name
                       </p>
                     )}
                   </div>
@@ -222,7 +222,7 @@ const Signup = () => {
                     </div>
                     {lastNameStatus && (
                       <p className="text-sm text-red-400">
-                        Filled cannot be empty
+                       Porvide a last name
                       </p>
                     )}
                   </div>
@@ -330,7 +330,7 @@ const Signup = () => {
                       />
                     </div>
                     {emailStatus && (
-                      <p className="text-sm text-red-400">Fill in an email</p>
+                      <p className="text-sm text-red-400">Provide your email</p>
                     )}
                   </div>
                   <div className="grid gap-2">
@@ -351,7 +351,7 @@ const Signup = () => {
                       />
                     </div>
                     {passwordStatus && (
-                      <p className="text-sm text-red-400">Fill in a password</p>
+                      <p className="text-sm text-red-400">Password cannot be empty</p>
                     )}
                   </div>
                 </div>
