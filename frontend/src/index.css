@@ -73,7 +73,7 @@ input:-ms-autofill {
     top: -15%;
 }
 
-.select, input {
+.select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;

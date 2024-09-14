@@ -8,11 +8,58 @@ import {
   FaEnvelope,
   FaKey,
   FaGlobe,
-  FaCalendarCheck,
   FaCalendar,
 } from "react-icons/fa6";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [country, setCountry] = useState("--Select Country--");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [gender, setGender] = useState("--Select Gender--");
+
+  const [formPhase, setFormPhase] = useState(0);
+  const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
+
+  function setFormReadyToNext() {
+    setFormPhase((prev) => prev + 1);
+  }
+
+  const checkInputFilledPhase0 = () => {
+    let status = false;
+    if (
+      firstName.trim() == "" ||
+      lastName.trim() == "" ||
+      middleName.trim() == ""
+    ) {
+      status = true;
+    }
+    return status;
+  };
+  const handleNextClick = () => {
+    if (formPhase == 0 && checkInputFilledPhase0()) {
+      setFormReadyToNext();
+    } else {
+      setNextButtonDisabled(true);
+    }
+    if (formPhase == 1 && checkInputFilledPhase1()) {
+      setFormReadyToNext();
+    } else {
+      setNextButtonDisabled(true);
+    }
+    if (formPhase == 2 && checkInputFilledPhase2()) {
+      setFormReadyToNext();
+    } else {
+      setNextButtonDisabled(true);
+    }
+    if (formPhase == 3 && checkInputFilledPhase3()) {
+      submitForm();
+    }
+  };
   return (
     <div className="app-container">
       <Link
@@ -30,76 +77,120 @@ const Signup = () => {
               id="signup_form"
               className="w-full grid gap-6 md:w-2/4 mx-auto"
             >
-              <div className="grid gap-4">
-                <div className="form-styles">
-                  <FaUserLarge />
-                  <input
-                    className="w-full"
-                    type="text"
-                    placeholder="First Name"
-                  />
+              <div className="grid ">
+                <di className={`${formPhase == 0 ? "grid gap-5" : "hidden"}`}>
+                  <div className="form-styles">
+                    <FaUserLarge />
+                    <input
+                      className="w-full"
+                      type="text"
+                      placeholder="First Name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-styles">
+                    <FaUser />
+                    <input
+                      className="w-full"
+                      type="text"
+                      placeholder="Middle Name"
+                      value={middleName}
+                      onChange={(e) => setMiddleName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-styles">
+                    <FaUser />
+                    <input
+                      className="w-full"
+                      type="text"
+                      placeholder="Last Name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
+                </di>
+                <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
+                  <div className="form-styles">
+                    <FaCalendar />
+                    <input
+                      className="w-full"
+                      type="date"
+                      placeholder="Last Name"
+                      value={dateOfBirth}
+                      onChange={(e) => setDateOfBirth(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-styles">
+                    <FaPerson />
+                    <select
+                      name=""
+                      id=""
+                      placeholder="--Select Gender--"
+                      className="select w-full"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <option value="--Select Gender--">
+                        --Select Gender--
+                      </option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </div>
+                  <div className="form-styles">
+                    <FaGlobe />
+                    <select
+                      name=""
+                      id=""
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      className="select w-full"
+                    >
+                      <option value="--Select Country">
+                        --Select Country--
+                      </option>
+                      <option value="Nigeria">Nigeria</option>
+                      <option value="Cameroon">Cameroon</option>
+                      <option value="Chad">Chad</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-styles">
-                  <FaUser />
-                  <input
-                    className="w-full"
-                    type="text"
-                    placeholder="Middle Name"
-                  />
+
+                <div className={`${formPhase == 2 ? "grid gap-5" : "hidden"}`}>
+                  <div className="form-styles">
+                    <FaEnvelope />
+                    <input
+                      className="w-full"
+                      type="email"
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-styles">
+                    <FaKey />
+                    <input
+                      className="w-full"
+                      type="password"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="form-styles">
-                  <FaUser />
-                  <input
-                    className="w-full"
-                    type="text"
-                    placeholder="Last Name"
-                  />
-                </div>
-                <div className="form-styles">
-                  <FaPerson />
-                  <select name="" id="" className="select w-full">
-                    <option value="">--Select Gender--</option>
-                    <option value="">Male</option>
-                    <option value="">Female</option>
-                    <option value="">Others</option>
-                  </select>
-                </div>
-                <div className="form-styles">
-                  <FaGlobe />
-                  <select name="" id="" className="select w-full">
-                    <option value="">--Select Country--</option>
-                    <option value="">Nigeria</option>
-                    <option value="">Cameroon</option>
-                    <option value="">Chad</option>
-                  </select>
-                </div>
-                <div className="form-styles">
-                  <FaCalendar />
-                  <input type="date" className="w-full" placeholder="Date of Birth"/>
-                </div>
-                <div className="form-styles">
-                  <FaEnvelope />
-                  <input
-                    className="w-full"
-                    type="email"
-                    placeholder="Email Address"
-                  />
-                </div>
-                <div className="form-styles">
-                  <FaKey />
-                  <input
-                    className="w-full"
-                    type="password"
-                    placeholder="Password"
-                  />
-                </div>
-                <div className="form-styles">
-                  <FaKey />
-                  <input
-                    className="w-full"
-                    type="password"
-                    placeholder="Confirm Password"
-                  />
+                <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
+                  <div className="form-styles">
+                    <FaKey />
+                    <input
+                      className="w-full"
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="grid py-5 items-center ml-auto w-full">
