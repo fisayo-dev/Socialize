@@ -354,7 +354,7 @@ const Signup = () => {
                         }}
                       />
                     </div>
-                    {passwordStatus && (
+                    {confirmPasswordStatus && (
                       <p className="text-sm text-red-400">Fill in a password</p>
                     )}
                   </div>
