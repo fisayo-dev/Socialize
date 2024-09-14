@@ -40,22 +40,53 @@ const Signup = () => {
 
   function setFormReadyToNext() {
     setFormPhase((prev) => prev + 1);
+    setNextButtonDisabled(true);
   }
 
   const getCurrentPhaseText = () => {
     switch (formPhase) {
       case 0:
-        return "Let us get to know you "
+        return "Let us get to know you ";
       case 1:
-        return "We want to recognize you"
+        return "We want to recognize you";
       case 2:
-        return "How old are you ? "
+        return "How old are you ? ";
       case 3:
-        return "We need to recognize you"
+        return "We need to recognize you";
       case 4:
-        return "Confirm it's you "
+        return "Confirm it's you ";
     }
-  }
+  };
+
+  useEffect(() => {
+    if (formPhase == 0 && checkInputFilledPhase0()) {
+      setNextButtonDisabled(false);
+    } else if (formPhase == 1 && checkInputFilledPhase1()) {
+      setNextButtonDisabled(false);
+    } else if (formPhase == 2 && !checkInputFilledPhase2()) {
+      setNextButtonDisabled(false);
+    } else if (formPhase == 3 && checkInputFilledPhase3()) {
+      setNextButtonDisabled(false);
+    } else if (formPhase == 4 && checkInputFilledPhase4()) {
+      setNextButtonDisabled(false);
+    }
+  }, [
+    email,
+    password,
+    firstName,
+    middleName,
+    lastName,
+    dateOfBirth,
+    country,
+    gender,
+    confirmPassword,
+  ]);
+
+  useEffect(() => {
+    if (formPhase == 4 && checkInputFilledPhase4()) {
+      setNextButtonDisabled(false);
+    }
+  }, [confirmPassword]);
 
   // Check if user age is less five or below
   const getUserInputAgeSatus = (dob) => {
@@ -104,31 +135,33 @@ const Signup = () => {
     }
     return status;
   };
+
   const handleNextClick = (e) => {
     e.preventDefault();
     if (formPhase == 0 && checkInputFilledPhase0()) {
       setFormReadyToNext();
     } else {
-      setNextButtonDisabled(true);
+      setNextButtonDisabled(false);
     }
     if (formPhase == 1 && checkInputFilledPhase1()) {
       setFormReadyToNext();
     } else {
-      setNextButtonDisabled(true);
+      setNextButtonDisabled(false);
     }
     if (formPhase == 2 && !checkInputFilledPhase2()) {
       setFormReadyToNext();
     } else {
-      setNextButtonDisabled(true);
+      setNextButtonDisabled(false);
     }
     if (formPhase == 3 && checkInputFilledPhase3()) {
       setFormReadyToNext();
     } else {
-      setNextButtonDisabled(true)
+      setNextButtonDisabled(false);
     }
     if (formPhase == 4 && checkInputFilledPhase4()) {
       submitForm();
     }
+    setNextButtonDisabled(true);
   };
 
   const handlePrevClick = (e) => {
@@ -146,7 +179,9 @@ const Signup = () => {
       <div className="w-full mx-auto">
         <div className="grid py-5">
           <div className="grid gap-10 ">
-            <h2 className="text-center text-4xl font-bold">{getCurrentPhaseText()}</h2>
+            <h2 className="text-center text-4xl font-bold">
+              {getCurrentPhaseText()}
+            </h2>
             <form
               name="signup_form"
               id="signup_form"
@@ -222,7 +257,7 @@ const Signup = () => {
                     </div>
                     {lastNameStatus && (
                       <p className="text-sm text-red-400">
-                       Porvide a last name
+                        Porvide a last name
                       </p>
                     )}
                   </div>
@@ -351,7 +386,9 @@ const Signup = () => {
                       />
                     </div>
                     {passwordStatus && (
-                      <p className="text-sm text-red-400">Password cannot be empty</p>
+                      <p className="text-sm text-red-400">
+                        Password cannot be empty
+                      </p>
                     )}
                   </div>
                 </div>
@@ -368,24 +405,25 @@ const Signup = () => {
                           e.target.value.trim() !== password
                             ? setConfirmPasswordStatus(true)
                             : setConfirmPasswordStatus(false);
-                          setConfirmPassword(e.target.value)
+                          setConfirmPassword(e.target.value);
                         }}
                       />
                     </div>
                     {confirmPasswordStatus && (
-                      <p className="text-sm text-red-400">Passwords don't match</p>
+                      <p className="text-sm text-red-400">
+                        Passwords don't match
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
-              <div
-                disabled={nextButtonDisabled}
-                className="disabled:bg-gray-500 disabled:cursor-not-allowed grid grid-cols-2 gap-5 py-5 items-center ml-auto w-full"
-              >
+              <div className=" grid grid-cols-2 gap-5 py-5 items-center ml-auto w-full">
                 {formPhase > 0 && (
                   <Button onClick={handlePrevClick}>Previous</Button>
                 )}
-                <Button onClick={handleNextClick}>Next</Button>
+                <Button disabled={nextButtonDisabled} onClick={handleNextClick}>
+                  Next
+                </Button>
               </div>
             </form>
           </div>
