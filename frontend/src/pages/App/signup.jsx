@@ -422,7 +422,7 @@ const Signup = () => {
                   <Button onClick={handlePrevClick}>Previous</Button>
                 )}
                 <Button disabled={nextButtonDisabled} onClick={handleNextClick}>
-                  Next
+                 {formPhase == 4 ? 'Done': 'Next'}
                 </Button>
               </div>
             </form>
