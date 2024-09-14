@@ -42,6 +42,21 @@ const Signup = () => {
     setFormPhase((prev) => prev + 1);
   }
 
+  const getCurrentPhaseText = () => {
+    switch (formPhase) {
+      case 0:
+        return "Let us get to know you "
+      case 1:
+        return "We want to recognize you"
+      case 2:
+        return "How old are you ? "
+      case 3:
+        return "We need to recognize you"
+      case 4:
+        return "Confirm it's you "
+    }
+  }
+
   // Check if user age is less five or below
   const getUserInputAgeSatus = (dob) => {
     const year = new Date(dob).getFullYear();
@@ -74,6 +89,7 @@ const Signup = () => {
   const checkInputFilledPhase2 = () => {
     getUserInputAgeSatus(dateOfBirth);
   };
+
   const checkInputFilledPhase3 = () => {
     let status = false;
     if (email.trim() !== "" && password.trim() !== "") {
@@ -130,7 +146,7 @@ const Signup = () => {
       <div className="w-full mx-auto">
         <div className="grid py-5">
           <div className="grid gap-10 ">
-            <h2 className="text-center text-4xl font-bold">SignUp</h2>
+            <h2 className="text-center text-4xl font-bold">{getCurrentPhaseText()}</h2>
             <form
               name="signup_form"
               id="signup_form"
