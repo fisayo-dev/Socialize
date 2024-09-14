@@ -12,7 +12,8 @@ import {
 } from "react-icons/fa6";
 
 const Signup = () => {
-  const currentYEAR = new Date().getFullYear();
+  const currentYEAR = new Date().getFullYear(); // Get's Cureent Year
+
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -41,6 +42,17 @@ const Signup = () => {
     setFormPhase((prev) => prev + 1);
   }
 
+  // Check if user age is less five or below
+  const getUserInputAgeSatus = (dob) => {
+    const year = new Date(dob).getFullYear();
+    let status = false;
+    if (currentYEAR - year < 6) {
+      // User is young.
+      status = true;
+    }
+    return status;
+  };
+
   const checkInputFilledPhase0 = () => {
     let status = false;
     if (
@@ -54,20 +66,13 @@ const Signup = () => {
   };
   const checkInputFilledPhase1 = () => {
     let status = false;
-    if (
-      gender !== "--Select Gender--" &&
-      country !== "--Select Country--"
-    ) {
+    if (gender !== "--Select Gender--" && country !== "--Select Country--") {
       status = true;
     }
     return status;
   };
   const checkInputFilledPhase2 = () => {
-    let status = false;
-    if (new Date(dateOfBirth).getFullYear() < currentYEAR - 2) {
-      status = true;
-    }
-    return status;
+    getUserInputAgeSatus(dateOfBirth);
   };
   const checkInputFilledPhase3 = () => {
     let status = false;
@@ -95,7 +100,7 @@ const Signup = () => {
     } else {
       setNextButtonDisabled(true);
     }
-    if (formPhase == 2 && checkInputFilledPhase2()) {
+    if (formPhase == 2 && !checkInputFilledPhase2()) {
       setFormReadyToNext();
     } else {
       setNextButtonDisabled(true);
@@ -230,7 +235,7 @@ const Signup = () => {
                       </select>
                     </div>
                     {genderStatus && (
-                      <p className="text-sm text-red-400">Select a Gender</p>
+                      <p className="text-sm text-red-400">Select your Gender</p>
                     )}
                   </div>
                   <div className="grid gap-2">
@@ -238,7 +243,7 @@ const Signup = () => {
                       <FaGlobe />
                       <select
                         name=""
-                        id=""
+                        id="#dede"
                         value={country}
                         onChange={(e) => {
                           e.target.value == "--Select Country--"
@@ -248,7 +253,7 @@ const Signup = () => {
                         }}
                         className="select w-full"
                       >
-                        <option value="--Select Country">
+                        <option value="--Select Country--">
                           --Select Country--
                         </option>
                         <option value="Nigeria">Nigeria</option>
@@ -273,9 +278,9 @@ const Signup = () => {
                         placeholder="Last Name"
                         value={dateOfBirth}
                         onChange={(e) => {
-                          new Date(dateOfBirth).getFullYear() < currentYEAR - 2
-                            ? setDateOfBirthStatus(false)
-                            : setDateOfBirthStatus(true);
+                          getUserInputAgeSatus(dateOfBirth)
+                            ? setDateOfBirthStatus(true)
+                            : setDateOfBirthStatus(false);
                           setDateOfBirth(e.target.value);
                         }}
                       />
@@ -289,37 +294,69 @@ const Signup = () => {
                 </div>
 
                 <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
-                  <div className="form-styles">
-                    <FaEnvelope />
-                    <input
-                      className="w-full"
-                      type="email"
-                      placeholder="Email Address"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaEnvelope />
+                      <input
+                        className="w-full"
+                        type="email"
+                        placeholder="Email Address"
+                        value={email}
+                        onChange={(e) => {
+                          e.target.value.trim() == ""
+                            ? setEmailStatus(true)
+                            : setEmailStatus(false);
+
+                          setEmail(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {emailStatus && (
+                      <p className="text-sm text-red-400">Fill in an email</p>
+                    )}
                   </div>
-                  <div className="form-styles">
-                    <FaKey />
-                    <input
-                      className="w-full"
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaKey />
+                      <input
+                        className="w-full"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => {
+                          e.target.value.trim() == ""
+                            ? setPasswordStatus(true)
+                            : setPasswordStatus(false);
+
+                          setPassword(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {passwordStatus && (
+                      <p className="text-sm text-red-400">Fill in a password</p>
+                    )}
                   </div>
                 </div>
                 <div className={`${formPhase == 4 ? "grid gap-5" : "hidden"}`}>
-                  <div className="form-styles">
-                    <FaKey />
-                    <input
-                      className="w-full"
-                      type="password"
-                      placeholder="Confirm Password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaKey />
+                      <input
+                        className="w-full"
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => {
+                          e.target.value.trim() == ""
+                            ? setConfirmPasswordStatus(true)
+                            : setConfirmPasswordStatus(false);
+                          setConfirmPassword(e.target.value)
+                        }}
+                      />
+                    </div>
+                    {passwordStatus && (
+                      <p className="text-sm text-red-400">Fill in a password</p>
+                    )}
                   </div>
                 </div>
               </div>
