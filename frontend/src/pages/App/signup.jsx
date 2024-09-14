@@ -32,8 +32,8 @@ const Signup = () => {
   const checkInputFilledPhase0 = () => {
     let status = false;
     if (
-      firstName.trim() !== "" ||
-      lastName.trim() !== "" ||
+      firstName.trim() !== "" &&
+      lastName.trim() !== "" &&
       middleName.trim() !== ""
     ) {
       status = true;
@@ -43,8 +43,8 @@ const Signup = () => {
   const checkInputFilledPhase1 = () => {
     let status = false;
     if (
-      firstName.trim() !== "" ||
-      lastName.trim() !== "" ||
+      firstName.trim() !== "" &&
+      lastName.trim() !== "" &&
       middleName.trim() !== ""
     ) {
       status = true;
@@ -53,7 +53,7 @@ const Signup = () => {
   };
   const checkInputFilledPhase2 = () => {
     let status = false;
-    if (email.trim() !== "" || password.trim() !== "") {
+    if (email.trim() !== "" && password.trim() !== "") {
       status = true;
     }
     return status;
@@ -85,6 +85,14 @@ const Signup = () => {
     if (formPhase == 3 && checkInputFilledPhase3()) {
       submitForm();
     }
+  };
+
+  const checkFieldInputError = (fieldValue) => {
+    let status = false;
+    if (fieldValue.trim() == "") {
+      status = true;
+    }
+    return status;
   };
 
   const handlePrevClick = (e) => {
@@ -120,10 +128,11 @@ const Signup = () => {
                         value={firstName}
                         onChange={(e) => {
                           setFirstName(e.target.value);
+                          checkFieldInputError(firstName);
                         }}
                       />
                     </div>
-                    {nextButtonDisabled && firstName.trim() == "" && (
+                    {checkFieldInputError(firstName) && (
                       <p className="text-sm text-red-400">
                         Filled cannot be empty
                       </p>
