@@ -24,15 +24,15 @@ const Signup = () => {
   const [gender, setGender] = useState("--Select Gender--");
 
   // Field status state
-  const [emailStatus, setEmailStatus] = useState(false);
   const [firstNameStatus, setFirstNameStatus] = useState(false);
   const [lastNameStatus, setLastNameStatus] = useState(false);
   const [middleNameStatus, setMiddleNameStatus] = useState(false);
   const [dateOfBirthStatus, setDateOfBirthStatus] = useState(false);
+  const [genderStatus, setGenderStatus] = useState(false);
   const [countryStatus, setCountryStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(false);
   const [passwordStatus, setPasswordStatus] = useState(false);
   const [confirmPasswordStatus, setConfirmPasswordStatus] = useState(false);
-  const [genderStatus, setGenderStatus] = useState(false);
 
   const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
@@ -196,50 +196,56 @@ const Signup = () => {
                   </div>
                 </div>
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
-                  <div className="form-styles">
-                    <FaCalendar />
-                    <input
-                      className="w-full"
-                      type="date"
-                      placeholder="Last Name"
-                      value={dateOfBirth}
-                      onChange={(e) => setDateOfBirth(e.target.value)}
-                    />
+                  <div className="grid-gap-2">
+                    <div className="form-styles">
+                      <FaCalendar />
+                      <input
+                        className="w-full"
+                        type="date"
+                        placeholder="Last Name"
+                        value={dateOfBirth}
+                        onChange={(e) => setDateOfBirth(e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div className="form-styles">
-                    <FaPerson />
-                    <select
-                      name=""
-                      id=""
-                      placeholder="--Select Gender--"
-                      className="select w-full"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                    >
-                      <option value="--Select Gender--">
-                        --Select Gender--
-                      </option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Others">Others</option>
-                    </select>
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaPerson />
+                      <select
+                        name=""
+                        id=""
+                        placeholder="--Select Gender--"
+                        className="select w-full"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <option value="--Select Gender--">
+                          --Select Gender--
+                        </option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Others">Others</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className="form-styles">
-                    <FaGlobe />
-                    <select
-                      name=""
-                      id=""
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="select w-full"
-                    >
-                      <option value="--Select Country">
-                        --Select Country--
-                      </option>
-                      <option value="Nigeria">Nigeria</option>
-                      <option value="Cameroon">Cameroon</option>
-                      <option value="Chad">Chad</option>
-                    </select>
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaGlobe />
+                      <select
+                        name=""
+                        id=""
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        className="select w-full"
+                      >
+                        <option value="--Select Country">
+                          --Select Country--
+                        </option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Cameroon">Cameroon</option>
+                        <option value="Chad">Chad</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
