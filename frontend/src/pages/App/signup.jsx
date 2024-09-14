@@ -53,19 +53,14 @@ const Signup = () => {
   };
   const checkInputFilledPhase2 = () => {
     let status = false;
-    if (
-      email.trim() !== "" ||
-      password.trim() !== ""
-    ) {
+    if (email.trim() !== "" || password.trim() !== "") {
       status = true;
     }
     return status;
   };
   const checkInputFilledPhase3 = () => {
     let status = false;
-    if (
-      password === confirmPassword
-    ) {
+    if (password === confirmPassword) {
       status = true;
     }
     return status;
@@ -91,6 +86,11 @@ const Signup = () => {
       submitForm();
     }
   };
+
+  const handlePrevClick = (e) => {
+    e.preventDefault();
+    setFormPhase((prev) => prev - 1);
+  };
   return (
     <div className="app-container">
       <Link
@@ -110,15 +110,24 @@ const Signup = () => {
             >
               <div className="grid ">
                 <div className={`${formPhase == 0 ? "grid gap-5" : "hidden"}`}>
-                  <div className="form-styles">
-                    <FaUserLarge />
-                    <input
-                      className="w-full"
-                      type="text"
-                      placeholder="First Name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                    />
+                  <div className="grid gap-2">
+                    <div className="form-styles">
+                      <FaUserLarge />
+                      <input
+                        className="w-full"
+                        type="text"
+                        placeholder="First Name"
+                        value={firstName}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                        }}
+                      />
+                    </div>
+                    {nextButtonDisabled && firstName.trim() == "" && (
+                      <p className="text-sm text-red-400">
+                        Filled cannot be empty
+                      </p>
+                    )}
                   </div>
                   <div className="form-styles">
                     <FaUser />
@@ -224,7 +233,13 @@ const Signup = () => {
                   </div>
                 </div>
               </div>
-              <div disabled={nextButtonDisabled} className="disabled:bg-gray-500 disabled:cursor-not-allowed grid py-5 items-center ml-auto w-full">
+              <div
+                disabled={nextButtonDisabled}
+                className="disabled:bg-gray-500 disabled:cursor-not-allowed grid grid-cols-2 gap-5 py-5 items-center ml-auto w-full"
+              >
+                {formPhase > 0 && (
+                  <Button onClick={handlePrevClick}>Previous</Button>
+                )}
                 <Button onClick={handleNextClick}>Next</Button>
               </div>
             </form>
