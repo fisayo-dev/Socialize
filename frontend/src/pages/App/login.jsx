@@ -98,6 +98,7 @@ const Login = () => {
                   Login
                 </Button>
               </div>
+              <Link to="/signup" className="text-center hover:underline text-slate-300">New to Socialize ?</Link>
             </form>
           </div>
         </div>
