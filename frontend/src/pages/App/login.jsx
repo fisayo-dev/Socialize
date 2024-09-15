@@ -35,7 +35,7 @@ const Login = () => {
       <div className="w-full mx-auto">
         <div className="grid py-5">
           <div className="grid gap-10 ">
-            <h2 className="text-center text-4xl font-bold">Login</h2>
+            <h2 className="text-center text-4xl font-bold">Welcome Back!!</h2>
             <form
               name="signup_form"
               id="signup_form"
