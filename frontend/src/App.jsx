@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Landing, Signup } from "./pages/App";
+import { Landing, Login, Signup } from "./pages/App";
 import { PageNotFound } from "./pages";
 function App() {
   const [message, setMessage] = useState("");
@@ -24,6 +24,7 @@ function App() {
         <Route path="/" element={<Landing message={message} />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
       </>
     )
   );
