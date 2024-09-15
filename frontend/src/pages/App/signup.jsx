@@ -431,6 +431,7 @@ const Signup = () => {
                   {formPhase == 4 ? "Done" : "Next"}
                 </Button>
               </div>
+              <Link to="/login" className="text-center hover:underline text-slate-300">Already have account?</Link>
             </form>
           </div>
         </div>
