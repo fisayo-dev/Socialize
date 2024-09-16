@@ -1,7 +1,9 @@
 const Chats = () => {
   return (
-    <div>Chats</div>
-  )
-}
+    <div className="grid  h-[100vh]">
+      <h1>Hi</h1>
+    </div>
+  );
+};
 
-export default Chats
+export default Chats;
