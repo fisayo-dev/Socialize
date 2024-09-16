@@ -5,7 +5,7 @@ const ChatLayout = () => {
     <div>
       <ChatSidebar />
       <Outlet />
-      <ChatProfile/>
+      <ChatProfile />
     </div>
   );
 };
