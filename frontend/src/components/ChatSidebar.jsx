@@ -5,22 +5,35 @@ import { useState, useEffect } from "react";
 
 const ChatSidebar = () => {
   const [friends, setFriends] = useState([]);
+  const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [usersRender, setUsersRender] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
 
-  const personId = 100; 
+  const personId = 100;
+
+  const searchFriends = () => {
+    const listOfFriends = friends.filter((friend) =>
+      friend.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+    );
+    setFilteredFriends(listOfFriends);
+  };
+
+  useEffect(() => {
+    searchFriends();
+  }, [searchValue]);
 
   const fetchUsers = async () => {
     const res = await fetch("/api/users/friends", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
-    },
-      body: JSON.stringify({personId})
-      
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ personId }),
     });
     const friends = await res.json();
     setFriends(friends);
+    setFilteredFriends(friends);
     console.log(friends);
   };
   useEffect(() => {
@@ -45,6 +58,8 @@ const ChatSidebar = () => {
                 type="text"
                 className="w-full"
                 placeholder="Search for friends"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
               />
             </div>
           </div>
@@ -71,7 +86,7 @@ const ChatSidebar = () => {
 
       <div className="grid gap-1 py-2">
         {usersRender === 0 &&
-          friends.map((friend) => (
+          filteredFriends.map((friend) => (
             <div key={friend.id} className="bg-slate-800 p-3">
               <div className="flex gap-5 items-center">
                 <div>
