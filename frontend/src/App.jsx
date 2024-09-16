@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { Landing, Login, Signup } from "./pages/App";
 import { ChatLayout } from "./layouts";
 import { PageNotFound } from "./pages";
+import { Chats, ChatsId } from "./pages/User";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -27,9 +28,9 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route element={<ChatLayout />}>
-          <Route path="/chats"/>
-          <Route path="/chats/:id"/>
+        <Route path="" element={<ChatLayout />}>
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/chats/:id" element={<ChatsId />} />
         </Route>
       </>
     )
