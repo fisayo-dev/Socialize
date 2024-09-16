@@ -1,0 +1,17 @@
+@import url('./variables.css');
+
+.chats-app-flex {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 2fr 6fr 2fr;
+}
+
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--app-text-color);
+    border-radius: 25px;
+}
