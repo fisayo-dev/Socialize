@@ -1,3 +1,3 @@
-import AppLayout from "./appLayout";
+import ChatLayout from "./chatLayout";
 
-export { AppLayout }
+export { ChatLayout }
