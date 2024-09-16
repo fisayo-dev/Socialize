@@ -5,9 +5,9 @@ const app = express();
 
 const port = process.env.PORT || 7000;
 
-// Json and body data middleware
+// Body parse middleware
 app.use(express.json())
-app.use(urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
 // Sample API route
 app.get('/api/', (req, res) => {
