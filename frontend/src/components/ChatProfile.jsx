@@ -1,7 +1,8 @@
-const ChatProfile = () => {
-  return (
-    <div>ChatProfile</div>
-  )
-}
+import { useParams } from "react-router-dom";
 
-export default ChatProfile
+const ChatProfile = () => {
+  const { id } = useParams();
+  return <div>ChatProfile - {id}</div>;
+};
+
+export default ChatProfile;

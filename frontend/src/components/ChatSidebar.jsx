@@ -4,4 +4,4 @@ const ChatSidebar = () => {
   )
 }
 
-export default ChatSidebar
+export default ChatSidebar;
