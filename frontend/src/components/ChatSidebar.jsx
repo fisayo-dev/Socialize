@@ -1,12 +1,31 @@
 import { FaUser, FaPlus, FaMagnifyingGlass } from "react-icons/fa6";
 
 import { AiOutlineUser } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ChatSidebar = () => {
   const [friends, setFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [usersRender, setUsersRender] = useState(0);
+
+  const personId = 100; 
+
+  const fetchUsers = async () => {
+    const res = await fetch("/api/users/friends", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+    },
+      body: JSON.stringify({personId})
+      
+    });
+    const friends = await res.json();
+    setFriends(friends);
+    console.log(friends);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div className="bg-black bg-opacity-20 overflow-x-hidden h-[100vh] ">
@@ -50,21 +69,24 @@ const ChatSidebar = () => {
         </div>
       </div>
 
-      <div className="grid py-2">
-        <div className="bg-slate-800 p-3">
-          <div className="flex gap-5 items-center">
-            <div>
-              <AiOutlineUser size={30} />
+      <div className="grid gap-1 py-2">
+        {usersRender === 0 &&
+          friends.map((friend) => (
+            <div key={friend.id} className="bg-slate-800 p-3">
+              <div className="flex gap-5 items-center">
+                <div>
+                  <AiOutlineUser size={30} />
+                </div>
+                <div className="grid w-full">
+                  <h2 className="text-md font-bold">{friend.name}</h2>
+                  <p className="text-sm">I will see you later.</p>
+                </div>
+                <div className="text-sm flex bg-slate-400 px-2 justify-center rounded-full">
+                  1
+                </div>
+              </div>
             </div>
-            <div className="grid w-full">
-              <h2 className="text-md font-bold">Fisayo</h2>
-              <p className="text-sm">I will see you later.</p>
-            </div>
-            <div className="text-sm flex bg-slate-400 px-2 justify-center rounded-full">
-              1
-            </div>
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );
