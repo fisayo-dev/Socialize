@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Landing, Login, Signup } from "./pages/App";
+import { ChatLayout } from "./layouts";
 import { PageNotFound } from "./pages";
 
 function App() {
@@ -26,6 +27,10 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route element={<ChatLayout />}>
+          <Route path="/chats"/>
+          <Route path="/chats/:id"/>
+        </Route>
       </>
     )
   );
