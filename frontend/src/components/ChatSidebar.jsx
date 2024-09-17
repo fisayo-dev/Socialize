@@ -175,10 +175,7 @@ const ChatSidebar = () => {
           filteredFriends.length !== 0 &&
           filteredFriends.map((friend) => (
             <NavLink to={`./chats/${friend.id}`} className={linkStatus}>
-              <div
-                key={friend.id}
-                className="cursor-pointer p-3"
-              >
+              <div key={friend.id} className="cursor-pointer p-3">
                 <div className="flex gap-5 items-center">
                   <div>
                     <AiOutlineUser size={30} />
@@ -197,12 +194,7 @@ const ChatSidebar = () => {
         {usersRender === 1 &&
           filteredRequests.length !== 0 &&
           filteredRequests.map((request) => (
-            <NavLink className={linkStatus} to={`/chats/${request.id}`}>
-
-            <div
-              key={request.id}
-              className="cursor-pointer  p-3"
-            >
+            <div key={request.id} className="cursor-pointer hover:bg-gray-800 p-3">
               <div className="flex gap-5 items-center">
                 <div>
                   <AiOutlineUser size={30} />
@@ -218,9 +210,7 @@ const ChatSidebar = () => {
                   Accept
                 </div>
               </div>
-              </div>
-            </NavLink>
-              
+            </div>
           ))}
       </div>
     </div>
