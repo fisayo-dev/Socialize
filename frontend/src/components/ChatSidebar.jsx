@@ -16,7 +16,7 @@ const ChatSidebar = () => {
   const personId = 100;
 
   const linkStatus = ({ isActive }) => {
-    return isActive ? "bg-gray-800" : "hover:bg-gray-700";
+    return isActive ? "bg-gray-700" : "hover:bg-gray-800";
   };
 
   const searchFriends = () => {
