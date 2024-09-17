@@ -3,7 +3,7 @@
 .chats-app-flex {
     display: grid;
     align-items: center;
-    grid-template-columns: 2fr 6fr 2fr;
+    grid-template-columns: 2.5fr 6fr 2fr;
 }
 
 
