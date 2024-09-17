@@ -201,7 +201,7 @@ const ChatSidebar = () => {
 
             <div
               key={request.id}
-              className="cursor-pointer hover:bg-slate-800 p-3"
+              className="cursor-pointer  p-3"
             >
               <div className="flex gap-5 items-center">
                 <div>
