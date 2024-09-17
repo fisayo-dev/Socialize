@@ -6,7 +6,6 @@
     grid-template-columns: 2.5fr 6fr 2fr;
 }
 
-
 ::-webkit-scrollbar {
     width: 5px;
 }
