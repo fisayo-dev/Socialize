@@ -6,11 +6,17 @@
     grid-template-columns: 2.5fr 6fr 2fr;
 }
 
+.side-bar-grid {
+    display: grid;
+    grid-template-rows: 1fr 9fr;
+}
+
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 3.4px;
+    height: 0;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: var(--app-text-color);
-    border-radius: 25px;
+    border-radius: 50px;
 }
