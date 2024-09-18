@@ -115,27 +115,33 @@ const getUsers = (req, res) => {
 }
 const getFriends = (req, res) => {
     const personId = parseInt(req.body.personId );
-    console.log(personId);
+    // console.log(personId);
     const fetchedFriends = fakeUsers.filter((user) => user.friends.includes(personId))
-    console.log(fetchedFriends)
+    // console.log(fetchedFriends)
     res.status(200).json(fetchedFriends)
 }
 const getFriendRequests = (req, res) => {
     const friendID = parseInt(req.body.personId);
     const fetchedRequestingFriends = fakeUsers.filter((user) => user.requests.includes(friendID));
-    console.log(fetchedRequestingFriends)
     res.status(200).json(fetchedRequestingFriends);
 }
 const acceptRequest = (req, res) => {
     const personId = req.body.personId
     const requestingUserId = req.body.requestingId;
 
-    const particluarRequestingUser = fakeUsers.filter((user) => user.id == requestingUserId)
-    console.log(particluarRequestingUser)
-    // particluarRequestingUser.requests.splice(0, personId)
-    // particluarRequestingUser.friends.push(personId)
+    const users = fakeUsers.filter((user) => user.friends.includes(personId))
 
-    res.status(200).json(particluarRequestingUser)
+    const particluarRequestingUser = fakeUsers.find((user) => user.id == requestingUserId)
+    particluarRequestingUser.requests.splice(1, personId)
+
+    // Adding request friend to friend
+    particluarRequestingUser.friends.push(personId)
+
+    // Updating friend
+    particluarRequestingUser.requests.splice(0,personId)
+
+    users.push(particluarRequestingUser)
+    res.status(200).json(users)
 }
 const getUser = (req, res) => {}
 const createUser = (req, res) => {}
