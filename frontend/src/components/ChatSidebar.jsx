@@ -95,7 +95,7 @@ const ChatSidebar = () => {
       <div className=" px-5 grid gap-2">
         <div className="grid w-full">
           <div className="flex py-3 items-center">
-            <h2 className="w-full font-bold text-[1.2rem]">Socialize</h2>
+            <Link to="/chats" className="w-full font-bold text-[1.2rem]">Socialize</Link>
             <div className="flex items-center gap-2">
               <FaPlus />
               <FaUser />
@@ -154,7 +154,6 @@ const ChatSidebar = () => {
         {usersRender === 0 && friends.length == 0 ? (
           <div className="text-center py-5 font-bold">
             <div>You have no friends.</div>
-            <Link></Link>
           </div>
         ) : (
           usersRender === 0 &&
