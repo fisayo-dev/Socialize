@@ -1,11 +1,15 @@
-import { FaUser, FaPlus, FaMagnifyingGlass } from "react-icons/fa6";
+import {
+  FaUser,
+  FaPlus,
+  FaMagnifyingGlass,
+  FaCircleDot,
+} from "react-icons/fa6";
 import { AiOutlineUser } from "react-icons/ai";
 import { useState, useEffect } from "react";
 import { Link, NavLink, useParams } from "react-router-dom";
 
 const ChatSidebar = () => {
-
-  const {id} = useParams()
+  const { id } = useParams();
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -95,15 +99,21 @@ const ChatSidebar = () => {
       <div className=" px-5 grid gap-2">
         <div className="grid w-full">
           <div className="flex py-3 items-center">
-            <Link to="/chats" className="w-full font-bold text-[1.2rem]">Socialize</Link>
+            <Link to="/chats" className="w-full font-bold text-[1.2rem]">
+              Socialize
+            </Link>
             <div className="flex items-center gap-2">
-              <FaPlus />
-              <FaUser />
+              <div className="cursor-pointer">
+                <FaPlus />
+              </div>
+              <div className="cursor-pointer">
+                <FaUser />
+              </div>
             </div>
           </div>
           {usersRender == 0 && (
-            <div className="bg-slate-800 rounded-lg p-3 text-[0.92rem]">
-              <div className="flex items-center gap-1">
+            <div className="bg-slate-800 rounded-lg p-3 text-[0.82rem]">
+              <div className="flex items-center gap-2">
                 <FaMagnifyingGlass />
                 <input
                   type="text"
@@ -116,8 +126,8 @@ const ChatSidebar = () => {
             </div>
           )}
           {usersRender == 1 && (
-            <div className="bg-slate-800 rounded-lg p-3 text-[0.92rem]">
-              <div className="flex items-center gap-1">
+            <div className="bg-slate-800 rounded-lg p-3 text-[0.82rem]">
+              <div className="flex items-center gap-2">
                 <FaMagnifyingGlass />
                 <input
                   type="text"
@@ -179,26 +189,26 @@ const ChatSidebar = () => {
 
         {usersRender === 0 &&
           filteredFriends.length !== 0 &&
-          filteredFriends.map(friend => 
-            <Link
-              key={friend.id} to={`chats/${friend.id}`}
-            >
-              <div className={`cursor-pointer  px-5 py-3 ${id == friend.id ? 'bg-slate-800' : 'hover:bg-slate-900'} `}>
-                <div className="flex gap-5 items-center">
+          filteredFriends.map((friend) => (
+            <Link key={friend.id} to={`chats/${friend.id}`}>
+              <div
+                className={`cursor-pointer  px-5 py-3 ${
+                  id == friend.id ? "bg-slate-800" : "hover:bg-slate-900"
+                } `}
+              >
+                <div className="friend-card-grid gap-5 items-center">
                   <div>
                     <AiOutlineUser size={30} />
                   </div>
                   <div className="grid w-full">
                     <h2 className="text-md font-bold">{friend.name}</h2>
-                    <p className="text-sm">{friend.email}</p>
+                    <p className="text-[0.72rem]">{friend.email}</p>
                   </div>
-                  <div className="text-sm flex bg-slate-400 text-slate-900 px-2 justify-center rounded-full">
-                    5
-                  </div>
+                  <FaCircleDot className="text-lg" />
                 </div>
               </div>
             </Link>
-          )}
+          ))}
         {usersRender === 1 &&
           filteredRequests.length !== 0 &&
           filteredRequests.map((request) => (
@@ -206,13 +216,13 @@ const ChatSidebar = () => {
               key={request.id}
               className="cursor-pointer hover:bg-gray-800 p-3"
             >
-              <div className="flex gap-5 items-center">
+              <div className="friend-card-grid gap-5 items-center">
                 <div>
                   <AiOutlineUser size={30} />
                 </div>
                 <div className="grid w-full">
                   <h2 className="text-md font-bold">{request.name}</h2>
-                  <p className="text-sm">{request.email}</p>
+                  <p className="text-[0.72rem]">{`${request.email.substring(0,12)} ...`}</p>
                 </div>
                 <div
                   onClick={acceptRequest.bind(this, request.id)}
