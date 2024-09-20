@@ -148,4 +148,4 @@ const createUser = (req, res) => {}
 const updateUser = (req, res) => {}
 const deleteUser = (req, res) => {}
 
-export {getUser,getUsers,createUser,updateUser,deleteUser, getFriends, getFriendRequests, acceptRequest}
+export { getUser, getUsers, createUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest }
