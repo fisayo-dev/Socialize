@@ -1,6 +1,7 @@
-import express, { json, urlencoded } from 'express';
+import express from 'express';
 import usersRouter from './routes/usersRouter.js'
-
+import connectDB from './mongodb/connect.js';
+ 
 const app = express();
 
 const port = process.env.PORT || 7000;
@@ -16,6 +17,10 @@ app.get('/api/', (req, res) => {
 
 app.use('/api/users', usersRouter)
 
+
+// Conenct to mongobd database
+connectDB(process.env.MONGODB_URL)
+// Listen to port
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
