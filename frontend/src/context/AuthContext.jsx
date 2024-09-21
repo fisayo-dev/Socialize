@@ -3,8 +3,22 @@ import { useContext, createContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+
+  const login = async (token) => {
+    localStorage.setItem('TOKEN', token);  
+    const jwt_decode = (await import('jwt-decode')).default; 
+    const decoded = jwt_decode(token);  
+    setUser(decoded); 
+  }
+
+  const contextData = {
+    user, 
+    setUser,
+    setLoading,
+    login,
+  }
 
   return (
     <AuthContext.Provider value={contextData}>
