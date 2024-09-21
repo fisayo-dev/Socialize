@@ -9,6 +9,7 @@ import { Landing, Login, Signup } from "./pages/App";
 import { ChatLayout } from "./layouts";
 import { PageNotFound } from "./pages";
 import { Chats, ChatsId } from "./pages/User";
+import PrivateRoutes  from "./utils/PrivateRoutes";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -28,9 +29,11 @@ function App() {
         <Route path="*" element={<PageNotFound />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="" element={<ChatLayout />}>
-          <Route path="/chats" element={<Chats />} />
-          <Route path="/chats/:id" element={<ChatsId />} />
+        <Route path="" element={<PrivateRoutes />}>
+          <Route path="" element={<ChatLayout />}>
+            <Route path="/chats" element={<Chats />} />
+            <Route path="/chats/:id" element={<ChatsId />} />
+          </Route>
         </Route>
       </>
     )
