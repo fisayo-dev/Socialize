@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components";
 import { useState, useEffect } from "react";
 import {
@@ -12,8 +12,13 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa6";
+import { useAuth } from "../../context/AuthContext";
 
 const Signup = () => {
+  // context import
+  const { user, login, setLoading } = useAuth();
+  const navigate = useNavigate();
+
   const currentYEAR = new Date().getFullYear(); // Get's Cureent Year
 
   const [email, setEmail] = useState("");
@@ -41,6 +46,12 @@ const Signup = () => {
 
   const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/chats");
+    }
+  }, []);
 
   function setFormReadyToNext() {
     setFormPhase((prev) => prev + 1);
@@ -91,6 +102,31 @@ const Signup = () => {
       setNextButtonDisabled(false);
     }
   }, [confirmPassword]);
+
+  const submitForm = async () => {
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        first_name: firstName,
+        middle_name: middleName,
+        last_name: lastName,
+        email,
+        profile_img: "/vite.svg",
+        gender,
+        country,
+        dob:dateOfBirth,
+        password,
+      }),
+    });
+    setLoading(true)
+    const data = await response.json();
+    if (data.token) {
+      login(data.token); 
+    } else {
+      console.error("Login failed");
+    }
+  };
 
   // Check if user age is less five or below
   const getUserInputAgeSatus = (dob) => {
@@ -377,7 +413,7 @@ const Signup = () => {
                       <FaKey />
                       <input
                         className="w-full"
-                        type={showPassword ? 'text': 'password'}
+                        type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         value={password}
                         onChange={(e) => {
@@ -388,7 +424,12 @@ const Signup = () => {
                           setPassword(e.target.value);
                         }}
                       />
-                      <div className="cursor-pointer" onClick={() => setShowPassword((prev) => !prev)}>{showPassword ? <FaEye /> : <FaEyeSlash />}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                      </div>
                     </div>
                     {passwordStatus && (
                       <p className="text-sm text-red-400">
@@ -403,7 +444,7 @@ const Signup = () => {
                       <FaKey />
                       <input
                         className="w-full"
-                        type={showConfirmPassword ? 'text': 'password'}
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => {
@@ -413,7 +454,12 @@ const Signup = () => {
                           setConfirmPassword(e.target.value);
                         }}
                       />
-                         <div className="cursor-pointer" onClick={() => setShowConfirmPassword((prev) => !prev)}>{showConfirmPassword ? <FaEye /> : <FaEyeSlash />}</div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      >
+                        {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                      </div>
                     </div>
                     {confirmPasswordStatus && (
                       <p className="text-sm text-red-400">
@@ -431,7 +477,12 @@ const Signup = () => {
                   {formPhase == 4 ? "Done" : "Next"}
                 </Button>
               </div>
-              <Link to="/login" className="text-center hover:underline text-slate-300">Already have account ?</Link>
+              <Link
+                to="/login"
+                className="text-center hover:underline text-slate-300"
+              >
+                Already have account ?
+              </Link>
             </form>
           </div>
         </div>
