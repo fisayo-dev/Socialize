@@ -10,7 +10,7 @@ router.get('/:id', getUser)
 // Create Routes
 router.post('/friends', getFriends)
 router.post('/requests', getFriendRequests)
-router.post('/', createUser)
+router.post('/register', createUser)
 
 // Update Routes
 router.put('/', updateUser)
