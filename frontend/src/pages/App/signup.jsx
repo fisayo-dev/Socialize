@@ -105,7 +105,7 @@ const Signup = () => {
 
   const submitForm = async () => {
     setLoading(true)
-    const response = await fetch("/api/users", {
+    const response = await fetch("/api/users/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
