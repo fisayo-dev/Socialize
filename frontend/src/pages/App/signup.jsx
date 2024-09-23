@@ -104,29 +104,33 @@ const Signup = () => {
   }, [confirmPassword]);
 
   const submitForm = async () => {
-    setLoading(true)
-    const response = await fetch("/api/users/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        first_name: firstName,
-        middle_name: middleName,
-        last_name: lastName,
-        email,
-        profile_img: "/vite.svg",
-        gender,
-        country,
-        dob:dateOfBirth,
-        password,
-      }),
-    });
-    const data = await response.json();
-    if (data.token) {
-      login(data.token); 
-    } else {
-      console.error("Login failed");
+    setLoading(true);
+    try {
+      const response = await fetch("/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: firstName,
+          middle_name: middleName,
+          last_name: lastName,
+          email,
+          profile_img: "/vite.svg",
+          gender,
+          country,
+          dob: dateOfBirth,
+          password,
+        }),
+      });
+      const data = await response.json();
+      if (data.token) {
+        login(data.token);
+      } else {
+        console.error("Login failed");
+      }
+    } catch (err) {
+      console.log(err);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   // Check if user age is less five or below
