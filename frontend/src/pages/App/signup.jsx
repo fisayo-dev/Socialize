@@ -104,6 +104,7 @@ const Signup = () => {
   }, [confirmPassword]);
 
   const submitForm = async () => {
+    setLoading(true)
     const response = await fetch("/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,13 +120,13 @@ const Signup = () => {
         password,
       }),
     });
-    setLoading(true)
     const data = await response.json();
     if (data.token) {
       login(data.token); 
     } else {
       console.error("Login failed");
     }
+    setLoading(false)
   };
 
   // Check if user age is less five or below
