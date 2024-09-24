@@ -13,11 +13,11 @@ router.post('/requests', getFriendRequests)
 router.post('/register', createUser)
 
 // Update Routes
-router.put('/', updateUser)
+router.put('/:id', updateUser)
 router.put('/friends', acceptRequest)
 
 // Delete Routes
-router.delete('/', deleteUser)
+router.delete('/:id', deleteUser)
 
 
 export default router
