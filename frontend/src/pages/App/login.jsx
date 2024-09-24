@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
 import { FaKey, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (user) {
+      navigate('/chats')
+    }
+  },[])
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailStatus, setEmailStatus] = useState(false);
   const [passwordStatus, setPasswordStatus] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginBtnDisabled, setLoginBtnDisabled] = useState(true);
+  
 
   useEffect(() => {
     if (email.trim() == "" || password.trim() == "") {
@@ -19,10 +30,9 @@ const Login = () => {
     }
   }, [email, password]);
 
-
   const handleLoginClick = () => {
-    console.log('Logged user in')
-  }
+    console.log("Logged user in");
+  };
 
   return (
     <div className="app-container">
@@ -98,7 +108,12 @@ const Login = () => {
                   Login
                 </Button>
               </div>
-              <Link to="/signup" className="text-center hover:underline text-slate-300">New to Socialize ?</Link>
+              <Link
+                to="/signup"
+                className="text-center hover:underline text-slate-300"
+              >
+                New to Socialize ?
+              </Link>
             </form>
           </div>
         </div>

@@ -19,6 +19,12 @@ const Signup = () => {
   const { user, login, setLoading } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user) {
+      navigate('/chats')
+    }
+  },[])
+
   const currentYEAR = new Date().getFullYear(); // Get's Cureent Year
 
   const [email, setEmail] = useState("");
@@ -47,11 +53,7 @@ const Signup = () => {
   const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      navigate("/chats");
-    }
-  }, []);
+  
 
   function setFormReadyToNext() {
     setFormPhase((prev) => prev + 1);
