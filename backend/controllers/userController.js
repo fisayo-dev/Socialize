@@ -44,12 +44,18 @@ const acceptRequest = (req, res) => {
     users.push(particluarRequestingUser)
     res.status(200).json(users)
 }
-const getUser = (req, res) => { }
+const getUser = (req, res) => { 
+    const id = req.params.id;
+    const particularUser = new User.findById(id)
+    if (particularUser) {
+        res.status(200).json(particularUser);
+    } else {
+        res.status(404).json({message: `User with id ${id} not found`})
+    }
+}
 
 const createUser = async (req, res) => {
     const { first_name, middle_name, last_name, profile_img, gender, country, dob, email,password } = req.body
-
-    // console.log(req.body);
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
