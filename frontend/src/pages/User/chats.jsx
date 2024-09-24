@@ -5,6 +5,10 @@ import { useAuth } from "../../context/AuthContext";
 const Chats = () => {
   const { user } = useAuth()
   console.log(user)
+
+  const fetchUserName = async () => {
+        
+  }
   return (
     <div className="grid place-items-center h-[100vh]">
       <div className="grid gap-1 text-center">
