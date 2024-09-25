@@ -2,16 +2,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components";
 import { useState, useEffect } from "react";
 import {
-  FaUser,
-  FaUserLarge,
-  FaPerson,
-  FaEnvelope,
-  FaKey,
-  FaGlobe,
-  FaCalendar,
-  FaEye,
-  FaEyeSlash,
-} from "react-icons/fa6";
+  EnvelopeIcon,
+  GlobeEuropeAfricaIcon,
+  CalendarIcon,
+  UserIcon,
+  UsersIcon,
+  UserGroupIcon,
+  EyeSlashIcon,
+  KeyIcon,
+  EyeIcon,
+  IdentificationIcon,
+} from "@heroicons/react/24/outline";
 import { useAuth } from "../../context/AuthContext";
 
 const Signup = () => {
@@ -21,9 +22,9 @@ const Signup = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/chats')
+      navigate("/chats");
     }
-  },[])
+  }, [user, navigate]);
 
   const currentYEAR = new Date().getFullYear(); // Get's Cureent Year
 
@@ -52,8 +53,6 @@ const Signup = () => {
 
   const [formPhase, setFormPhase] = useState(0);
   const [nextButtonDisabled, setNextButtonDisabled] = useState(true);
-
-  
 
   function setFormReadyToNext() {
     setFormPhase((prev) => prev + 1);
@@ -238,7 +237,7 @@ const Signup = () => {
                 <div className={`${formPhase == 0 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaUserLarge />
+                      <UserIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="text"
@@ -262,7 +261,7 @@ const Signup = () => {
                   </div>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                      <FaUser />
+                    <IdentificationIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="text"
@@ -286,7 +285,7 @@ const Signup = () => {
                   </div>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                      <FaUser />
+                    <UserGroupIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="text"
@@ -312,7 +311,7 @@ const Signup = () => {
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaPerson />
+                     <UsersIcon className="w-6 h-6"/>
                       <select
                         name=""
                         id=""
@@ -340,7 +339,7 @@ const Signup = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaGlobe />
+                    <GlobeEuropeAfricaIcon className="w-6 h-6"/>
                       <select
                         name=""
                         id="#dede"
@@ -371,7 +370,7 @@ const Signup = () => {
                 <div className={`${formPhase == 2 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                      <FaCalendar />
+                    <CalendarIcon className="w-6 h-6"/>
                       <input
                         className="w-full"
                         type="date"
@@ -396,7 +395,7 @@ const Signup = () => {
                 <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaEnvelope />
+                    <EnvelopeIcon className="w-6 h-6"/>
                       <input
                         className="w-full"
                         type="email"
@@ -417,7 +416,7 @@ const Signup = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaKey />
+                    <KeyIcon className="w-6 h-6"/>
                       <input
                         className="w-full"
                         type={showPassword ? "text" : "password"}
@@ -435,7 +434,7 @@ const Signup = () => {
                         className="cursor-pointer"
                         onClick={() => setShowPassword((prev) => !prev)}
                       >
-                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        {showPassword ? <EyeIcon className="w-6 h-6"/> :<EyeSlashIcon className="w-6 h-6"/>}
                       </div>
                     </div>
                     {passwordStatus && (
@@ -448,7 +447,7 @@ const Signup = () => {
                 <div className={`${formPhase == 4 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                      <FaKey />
+                    <KeyIcon className="w-6 h-6"/>
                       <input
                         className="w-full"
                         type={showConfirmPassword ? "text" : "password"}
@@ -465,7 +464,7 @@ const Signup = () => {
                         className="cursor-pointer"
                         onClick={() => setShowConfirmPassword((prev) => !prev)}
                       >
-                        {showConfirmPassword ? <FaEye /> : <FaEyeSlash />}
+                        {showConfirmPassword ? <EyeIcon className="w-6 h-6" /> : <EyeSlashIcon className="w-6 h-6"/>}
                       </div>
                     </div>
                     {confirmPasswordStatus && (
