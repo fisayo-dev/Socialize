@@ -1,23 +1,44 @@
 import { useParams } from "react-router-dom";
-import { FaBridgeLock, FaFootball } from "react-icons/fa6";
+import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
+import { UserCircleIcon, UserMinusIcon, ShieldExclamationIcon } from "@heroicons/react/24/outline";
 
 const ChatProfile = () => {
   const { id } = useParams();
+  const { user } = useAuth();
+  const userId = user.userId;
+  const [loggedUser, setLoggedUser] = useState();
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`/api/users/${userId}`);
+      const data = await res.json();
+      setLoggedUser(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <div className="app-dark-bg-color h-[100vh]">
-      <div className="grid gap-10 py-5 justify-center">
+      <div className="grid gap-10 py-10 justify-center">
         <div className="grid text-center gap-1">
-          <img src="/vite.svg" alt="" className="mx-auto w-20" />
-          <h2 className="text-3xl font-bold">Fisayo</h2>
-          <h2 className="text-sm">olufisayo@gmail.com</h2>
+          <UserCircleIcon className="w-24 h-24 mx-auto" />
+          <h2 className="text-3xl font-bold">
+            {loggedUser && loggedUser.first_name}
+          </h2>
+          <h2 className="text-sm">{loggedUser && loggedUser.email}</h2>
         </div>
         <div className="grid grid-cols-2 items-center gap-2">
           <div className="grid p-4 rounded-lg cursor-pointer hover:bg-slate-800 gap-2 place-items-center">
-            <FaBridgeLock className="text-3xl" />
+           <ShieldExclamationIcon className="w-7 h-7"/>
             <p className="text-sm">Block</p>
           </div>
           <div className="grid p-4 rounded-lg cursor-pointer hover:bg-slate-800 gap-2 place-items-center">
-            <FaFootball className="text-3xl" />
+            <UserMinusIcon className="w-7 h-7"/>
             <p className="text-sm">Unfriend</p>
           </div>
         </div>

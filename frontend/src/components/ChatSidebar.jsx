@@ -1,15 +1,33 @@
-import {
-  FaUser,
-  FaPlus,
-  FaMagnifyingGlass,
-  FaCircleDot,
-} from "react-icons/fa6";
-import { AiOutlineUser } from "react-icons/ai";
 import { useState, useEffect } from "react";
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const ChatSidebar = () => {
+import { ArrowRightCircleIcon, PlusIcon, MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import NoFriends from "../assets/no_friends.svg";
+import RequestFriends from "../assets/request_friends.svg";
+import { Button } from "../components";
+
+const ChatSidebar = ({ setShow }) => {
   const { id } = useParams();
+  const { user, logout } = useAuth();
+  const userId = user.userId;
+  const [loggedUser, setLoggedUser] = useState();
+  const navigate = useNavigate();
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`/api/users/${userId}`);
+      const data = await res.json();
+      setLoggedUser(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -17,11 +35,6 @@ const ChatSidebar = () => {
   const [usersRender, setUsersRender] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
-
-  const personId = 100;
-
-  const linkStatus = ({ isActive }) =>
-    isActive ? "bg-slate-700" : "hover:bg-slate-800";
 
   const searchFriends = () => {
     const listOfFriends = friends.filter((friend) =>
@@ -89,6 +102,7 @@ const ChatSidebar = () => {
   useEffect(() => {
     searchRequests();
   }, [searchRequestValue]);
+
   useEffect(() => {
     fetchFriends();
     fetchFriendRequests();
@@ -96,25 +110,37 @@ const ChatSidebar = () => {
 
   return (
     <div className="app-dark-bg-color relative side-bar-grid overflow-x-hidden h-[100vh] ">
-      <div className=" px-5 grid gap-2">
+      <div className="px-5 py-5 grid gap-2">
         <div className="grid w-full">
           <div className="flex py-3 items-center">
-            <Link to="/chats" className="w-full font-bold text-[1.2rem]">
-              Socialize
+            <Link to="/chats" className="w-full ">
+              <h2 className="font-bold text-[1.1rem]">Socialize</h2>
+              <p className="text-sm">
+                {!id && loggedUser && loggedUser.first_name}
+              </p>
             </Link>
             <div className="flex items-center gap-2">
-              <div className="cursor-pointer">
-                <FaPlus />
+              <div
+                onClick={setShow.bind(this, true)}
+                className="cursor-pointer"
+              >
+                <PlusIcon className="w-6 h-6" />
               </div>
-              <div className="cursor-pointer">
-                <FaUser />
+              <div
+                onClick={() => {
+                  logout();
+                  navigate("/chats");
+                }}
+                className="cursor-pointer"
+              >
+                <ArrowRightCircleIcon className="h-6 w-6" />
               </div>
             </div>
           </div>
           {usersRender == 0 && (
-            <div className="bg-slate-800 rounded-lg p-3 text-[0.82rem]">
+            <div className="bg-slate-800 rounded-lg p-3 text-[0.87rem]">
               <div className="flex items-center gap-2">
-                <FaMagnifyingGlass />
+                <MagnifyingGlassIcon className="w-6 h-6"/>
                 <input
                   type="text"
                   className="w-full"
@@ -126,9 +152,9 @@ const ChatSidebar = () => {
             </div>
           )}
           {usersRender == 1 && (
-            <div className="bg-slate-800 rounded-lg p-3 text-[0.82rem]">
+            <div className="bg-slate-800 rounded-lg p-3 text-[0.87rem]">
               <div className="flex items-center gap-2">
-                <FaMagnifyingGlass />
+              <MagnifyingGlassIcon className="w-6 h-6"/>
                 <input
                   type="text"
                   className="w-full"
@@ -162,8 +188,12 @@ const ChatSidebar = () => {
 
       <div className=" overflow-y-scroll py-3">
         {usersRender === 0 && friends.length == 0 ? (
-          <div className="text-center py-5 font-bold">
-            <div>You have no friends.</div>
+          <div className="grid gap-5 text-center py-5 font-bold">
+            <img src={NoFriends} className="w-4/5 mx-auto" alt="" draggable={false}/>
+            <p>You have no friends.</p>
+            <div onClick={setShow.bind(this, true)}>
+              <Button>Create friends</Button>
+            </div>
           </div>
         ) : (
           usersRender === 0 &&
@@ -174,9 +204,12 @@ const ChatSidebar = () => {
           )
         )}
         {usersRender === 1 && requests.length == 0 ? (
-          <div className="text-center py-5 font-bold">
-            <h1>No friends request available.</h1>
-            <Link></Link>
+          <div className="grid gap-5 text-center py-5 font-bold">
+            <img src={RequestFriends} className="w-3/5 mx-auto" alt="" draggable={false}/>
+            <p>No friend request available</p>
+            <div onClick={setShow.bind(this, true)}>
+              <Button>Send request</Button>
+            </div>
           </div>
         ) : (
           usersRender === 1 &&
@@ -198,7 +231,7 @@ const ChatSidebar = () => {
               >
                 <div className="friend-card-grid gap-5 items-center">
                   <div>
-                    <AiOutlineUser size={30} />
+                  <UserCircleIcon className="w-6 h-6"/>
                   </div>
                   <div className="grid w-full">
                     <h2 className="text-md font-bold">{friend.name}</h2>
@@ -218,11 +251,14 @@ const ChatSidebar = () => {
             >
               <div className="friend-card-grid gap-5 items-center">
                 <div>
-                  <AiOutlineUser size={30} />
+                <UserCircleIcon className="w-6 h-6"/>
                 </div>
                 <div className="grid w-full">
                   <h2 className="text-md font-bold">{request.name}</h2>
-                  <p className="text-[0.72rem]">{`${request.email.substring(0,12)} ...`}</p>
+                  <p className="text-[0.72rem]">{`${request.email.substring(
+                    0,
+                    12
+                  )} ...`}</p>
                 </div>
                 <div
                   onClick={acceptRequest.bind(this, request.id)}
