@@ -1,14 +1,25 @@
-import { Link } from "react-router-dom";
-import Button from "../../components/Button";
 import { useAuth } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
 
 const Chats = () => {
-  const { user } = useAuth()
-  console.log(user)
+  const { user } = useAuth();
+  const userId = user.userId;
+  const [loggedUser, setLoggedUser] = useState();
+  
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`/api/users/${userId}`);
+      const data = await res.json();
+      setLoggedUser(data);
+    } catch (err) {
+      console.log(err)
+    }
+  };
 
-  const fetchUserName = async () => {
-        
-  }
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  
   return (
     <div className="grid place-items-center h-[100vh]">
       <div className="grid gap-1 text-center">
@@ -17,12 +28,9 @@ const Chats = () => {
             Socialize
           </h2>
         </div>
-          <p className="text-md text-slate-400">
-            Choose a friend to start chatting.
-          </p>
-        <Link to="/" className="mt-1">
-          <Button>Create Friend</Button>
-        </Link>
+        <p className="text-md text-slate-400">
+          Choose a friend to start chatting, <b>{loggedUser && loggedUser.first_name}</b>
+        </p>
       </div>
     </div>
   );
