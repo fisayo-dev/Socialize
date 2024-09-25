@@ -7,7 +7,11 @@ export default defineConfig({
   server: {
     port: 4500,
     proxy: {
-      '/api': 'http://localhost:7000',  // Proxy API requests to Node.js backend
+      '/api': {
+        target: 'http://localhost:7000', // Replace with your backend server URL
+        changeOrigin: true,
+        secure: false,
+      },  // Proxy API requests to Node.js backend
     },
   }
 })
