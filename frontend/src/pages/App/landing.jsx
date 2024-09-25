@@ -11,7 +11,7 @@ const Landing = ({ message = "" }) => {
     if (user) {
       navigate("/chats");
     }
-  }, []);
+  }, [user,navigate]);
   return (
     <div className="grid h-[100vh] ">
       <Header />
