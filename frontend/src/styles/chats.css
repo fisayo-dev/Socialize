@@ -55,3 +55,10 @@
     border-bottom-left-radius: 0 !important;
     @apply mr-auto bg-slate-800;
 }
+
+.middle-card {
+    @apply absolute container w-4/5 md:w-1/2 xl:w-2/5 ;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
