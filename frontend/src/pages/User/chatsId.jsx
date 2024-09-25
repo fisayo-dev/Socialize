@@ -1,12 +1,32 @@
-import { useParams } from "react-router-dom";
-import { FaUser, FaExclamation, FaImage, FaCommentDots, FaPersonDotsFromLine, FaHandDots, FaRegCommentDots } from "react-icons/fa6";
+import {  useParams } from "react-router-dom";
+import { FaUser, FaExclamation, FaImage } from "react-icons/fa6";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
 
 const ChatsId = () => {
   const { id } = useParams();
+  const { user } = useAuth();
+  // const userId = user.userId;
+  const [loggedUser, setLoggedUser] = useState();
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`/api/users/`);
+      const data = await res.json();
+      setLoggedUser(data);
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchUser()
+  // }, [id,userId]);
+
   return (
     <>
       <div className="chats-msg-grid h-[100vh]">
-        <div className="bg-transparent border-b  border-slate-500 px-8 py-3">
+        <div className="bg-transparent border-b border-slate-500 px-8 py-3">
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
               <div className="text-2xl ">
@@ -22,7 +42,7 @@ const ChatsId = () => {
             </div>
           </div>
         </div>
-        <div className="bg-transparent   overflow-x-hidden overflow-y-scroll py-2 px-4">
+        <div className="bg-transparent  overflow-x-hidden overflow-y-scroll py-2 px-4">
           <div className="hidden text-center py-20 gap-2">
             <h2 className="text-2xl">No chats to show</h2>
             <p className="text-sm">Start a conversation</p>
