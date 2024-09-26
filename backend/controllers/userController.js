@@ -2,17 +2,16 @@ import User from '../mongodb/models/user.js'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv'
+import mongoose  from 'mongoose'
+
 
 dotenv.config()
 
 const SECRET_KEY = process.env.SECRET_KEY;
-async function callUsers() {
-    const allUsers = await User.findOne({ email })
-    return allUsers;
-} 
 
-const getUsers = (req, res) => { 
-    res.status(201).json(callUsers())
+const getUsers = async (req, res) => { 
+    const allUsers = await User.find()
+    res.status(200).json(allUsers)
 }
 const getFriends = (req, res) => {
     const personId = parseInt(req.body.personId );
@@ -21,10 +20,13 @@ const getFriends = (req, res) => {
     // console.log(fetchedFriends)
     res.status(200).json(fetchedFriends)
 }
-const getFriendRequests = (req, res) => {
-    const friendID = parseInt(req.body.personId);
-    const fetchedRequestingFriends = fakeUsers.filter((user) => user.requests.includes(friendID));
-    res.status(200).json(fetchedRequestingFriends);
+const getFriendRequests = async (req, res) => {
+    const { userId } = req.body
+
+    const formattedFriendID = mongoose.Types.ObjectId.isValid(userId) ? new mongoose.Types.ObjectId(userId) : userId;
+
+    const totalRequests = await User.find({ requests: { $in: [formattedFriendID] } }) 
+    res.status(200).json(totalRequests);
 }
 const acceptRequest = (req, res) => {
     const personId = req.body.personId
@@ -44,14 +46,13 @@ const acceptRequest = (req, res) => {
     users.push(particluarRequestingUser)
     res.status(200).json(users)
 }
-const getUser = (req, res) => { 
-    const id = req.params.id;
-    const particularUser = new User.findById(id)
-    if (particularUser) {
-        res.status(200).json(particularUser);
-    } else {
-        res.status(404).json({message: `User with id ${id} not found`})
+const getUser = async (req, res) => { 
+    const {id} = req.params
+    const user = await User.findOne({ _id: id })
+    if (!user) {
+        return res.status(404).json({message: `User with id ${id} not found`})
     }
+    res.status(200).json(user)
 }
 
 const createUser = async (req, res) => {
@@ -81,7 +82,44 @@ const createUser = async (req, res) => {
         res.status(500).json({ error: 'Error registering user' });
     }
 }
+
+const createFriends = async (req,res) => {
+    const { userId, friendId } = req.body;
+
+    // Getting requesting to friend
+    const user = await User.findOne({ _id: friendId })
+    
+    // Check if user exists
+    if (!user) return res.status(404).json({ message: 'User not found' })
+    
+    // Add userId to the requests array of the friend
+    await User.updateOne(
+        { _id: friendId }, // Filter by the friend ID
+        { $addToSet: { requests: userId } } // Add userId to the requests array (avoids duplicates)
+    );
+}
+
+const validateUser = async (req,res) => {
+    const { email, password } = req.body;
+    
+    // Find user by email
+    const user = await User.findOne({ email })
+    
+    // Check the user
+    if (!user) return res.status(404).json({ message: `User with ${email} email does not have an ccount` })
+    
+    // Check the password
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    if(!isPasswordValid) return res.status(401).json({message: 'User credentials not valid'})
+
+    // Generate a JWT
+    const token = jwt.sign({ userId: user._id }, SECRET_KEY, { expiresIn: '1h' });
+
+    // Send a JWT to client
+    res.json({token})
+}
 const updateUser = (req, res) => {}
 const deleteUser = (req, res) => {}
 
-export { getUser, getUsers, createUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest }
+export { getUser, getUsers, createUser, validateUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest, createFriends }
+
