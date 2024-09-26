@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUsers, getUser, updateUser, deleteUser, createUser, getFriends, getFriendRequests, acceptRequest } from '../controllers/userController.js'
+import { getUsers, getUser, validateUser, updateUser, deleteUser, createUser, getFriends, getFriendRequests, acceptRequest, createFriends } from '../controllers/userController.js'
 
 const router = express.Router()
 
@@ -11,6 +11,8 @@ router.get('/:id', getUser)
 router.post('/friends', getFriends)
 router.post('/requests', getFriendRequests)
 router.post('/register', createUser)
+router.post('/login', validateUser)
+router.post('/friends/create', createFriends)
 
 // Update Routes
 router.put('/:id', updateUser)
