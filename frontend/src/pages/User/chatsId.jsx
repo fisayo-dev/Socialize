@@ -37,8 +37,8 @@ const ChatsId = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold">{currentChattingUser && currentChattingUser.first_name}</h2>
-                <p className="text-sm">{currentChattingUser && currentChattingUser.email}</p>
               </div>
+                <p className="text-sm">{currentChattingUser && currentChattingUser.email}</p>
             </div>
             <div className="flex gap-2 items-center">
               <FaExclamation />
