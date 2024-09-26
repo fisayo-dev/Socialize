@@ -51,11 +51,21 @@ const Login = () => {
           showConfirmButton: false,
           text: data.message,
           icon: 'error',
-          timer: 5000,
+          timer: 3500,
+          timerProgressBar: true,
         })
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        text: "Couldn't connect to database",
+        icon: 'error',
+        timer: 3500,
+        timerProgressBar: true,
+      })
+      // How are you doing today
     }
     setLoading(false);
   }
