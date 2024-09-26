@@ -2,9 +2,17 @@ import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-import { ArrowRightCircleIcon, PlusIcon, MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowRightCircleIcon,
+  PlusIcon,
+  MagnifyingGlassIcon,
+  UserCircleIcon,
+  CheckBadgeIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import NoFriends from "../assets/no_friends.svg";
 import RequestFriends from "../assets/request_friends.svg";
+import NoRequest from "../assets/no_requests.svg";
 import { Button } from "../components";
 
 const ChatSidebar = ({ setShow }) => {
@@ -24,15 +32,11 @@ const ChatSidebar = ({ setShow }) => {
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
-  const [usersRender, setUsersRender] = useState(0);
+  const [usersRender, setUsersRender] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
 
@@ -44,7 +48,7 @@ const ChatSidebar = ({ setShow }) => {
   };
   const searchRequests = () => {
     const listOfRequests = requests.filter((request) =>
-      request.name
+      request.first_name
         .toLocaleLowerCase()
         .includes(searchRequestValue.toLocaleLowerCase())
     );
@@ -52,16 +56,27 @@ const ChatSidebar = ({ setShow }) => {
   };
 
   const fetchFriendRequests = async () => {
-    const res = await fetch("/api/users/requests", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ personId }),
-    });
-    const friendRequests = await res.json();
-    setRequests(friendRequests);
-    setFilteredRequests(friendRequests);
+    try {
+      const res = await fetch("/api/users/requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+      const data = await res.json();
+      const friendRequests = data.sort((a, b) => b - a);
+      setRequests(friendRequests);
+
+      // Update filtered requests only if search is empty
+      if (searchRequestValue.trim() !== "") {
+        setFilteredRequests(friendRequests);
+      }
+
+      setTimeout(fetchFriendRequests, 20);
+    } catch (err) {
+      console.error(err);
+    }
   };
   const fetchFriends = async () => {
     const res = await fetch("/api/users/friends", {
@@ -104,6 +119,7 @@ const ChatSidebar = ({ setShow }) => {
   }, [searchRequestValue]);
 
   useEffect(() => {
+    fetchUser();
     fetchFriends();
     fetchFriendRequests();
   }, []);
@@ -115,9 +131,7 @@ const ChatSidebar = ({ setShow }) => {
           <div className="flex py-3 items-center">
             <Link to="/chats" className="w-full ">
               <h2 className="font-bold text-[1.1rem]">Socialize</h2>
-              <p className="text-sm">
-                {!id && loggedUser && loggedUser.first_name}
-              </p>
+              <p className="text-sm">{loggedUser && loggedUser.first_name}</p>
             </Link>
             <div className="flex items-center gap-2">
               <div
@@ -140,7 +154,7 @@ const ChatSidebar = ({ setShow }) => {
           {usersRender == 0 && (
             <div className="bg-slate-800 rounded-lg p-3 text-[0.87rem]">
               <div className="flex items-center gap-2">
-                <MagnifyingGlassIcon className="w-6 h-6"/>
+                <MagnifyingGlassIcon className="w-6 h-6" />
                 <input
                   type="text"
                   className="w-full"
@@ -154,7 +168,7 @@ const ChatSidebar = ({ setShow }) => {
           {usersRender == 1 && (
             <div className="bg-slate-800 rounded-lg p-3 text-[0.87rem]">
               <div className="flex items-center gap-2">
-              <MagnifyingGlassIcon className="w-6 h-6"/>
+                <MagnifyingGlassIcon className="w-6 h-6" />
                 <input
                   type="text"
                   className="w-full"
@@ -189,7 +203,12 @@ const ChatSidebar = ({ setShow }) => {
       <div className=" overflow-y-scroll py-3">
         {usersRender === 0 && friends.length == 0 ? (
           <div className="grid gap-5 text-center py-5 font-bold">
-            <img src={NoFriends} className="w-4/5 mx-auto" alt="" draggable={false}/>
+            <img
+              src={NoFriends}
+              className="w-4/5 mx-auto"
+              alt=""
+              draggable={false}
+            />
             <p>You have no friends.</p>
             <div onClick={setShow.bind(this, true)}>
               <Button>Create friends</Button>
@@ -205,7 +224,12 @@ const ChatSidebar = ({ setShow }) => {
         )}
         {usersRender === 1 && requests.length == 0 ? (
           <div className="grid gap-5 text-center py-5 font-bold">
-            <img src={RequestFriends} className="w-3/5 mx-auto" alt="" draggable={false}/>
+            <img
+              src={RequestFriends}
+              className="w-2/6 mx-auto"
+              alt=""
+              draggable={false}
+            />
             <p>No friend request available</p>
             <div onClick={setShow.bind(this, true)}>
               <Button>Send request</Button>
@@ -214,8 +238,14 @@ const ChatSidebar = ({ setShow }) => {
         ) : (
           usersRender === 1 &&
           filteredRequests.length == 0 && (
-            <div className="text-center py-5 font-bold">
-              No friend requests.
+            <div className="grid gap-5 text-center py-5 font-bold">
+              <img
+                src={NoRequest}
+                className="w-3/5 mx-auto"
+                alt=""
+                draggable={false}
+              />
+              <p>Couldn't find request</p>
             </div>
           )
         )}
@@ -223,7 +253,7 @@ const ChatSidebar = ({ setShow }) => {
         {usersRender === 0 &&
           filteredFriends.length !== 0 &&
           filteredFriends.map((friend) => (
-            <Link key={friend.id} to={`chats/${friend.id}`}>
+            <Link key={friend.id} to={`chats/${friend._id}`}>
               <div
                 className={`cursor-pointer  px-5 py-3 ${
                   id == friend.id ? "bg-slate-800" : "hover:bg-slate-900"
@@ -231,7 +261,7 @@ const ChatSidebar = ({ setShow }) => {
               >
                 <div className="friend-card-grid gap-5 items-center">
                   <div>
-                  <UserCircleIcon className="w-6 h-6"/>
+                    <UserCircleIcon className="w-6 h-6" />
                   </div>
                   <div className="grid w-full">
                     <h2 className="text-md font-bold">{friend.name}</h2>
@@ -246,26 +276,23 @@ const ChatSidebar = ({ setShow }) => {
           filteredRequests.length !== 0 &&
           filteredRequests.map((request) => (
             <div
-              key={request.id}
-              className="cursor-pointer hover:bg-gray-800 p-3"
+              key={request._id}
+              className="cursor-pointer grid gap-2 hover:bg-gray-900 px-3 py-5"
             >
-              <div className="friend-card-grid gap-5 items-center">
+              <div className="flex gap-2 items-center">
                 <div>
-                <UserCircleIcon className="w-6 h-6"/>
+                  <UserCircleIcon className="w-10 h-10" />
                 </div>
                 <div className="grid w-full">
-                  <h2 className="text-md font-bold">{request.name}</h2>
-                  <p className="text-[0.72rem]">{`${request.email.substring(
-                    0,
-                    12
-                  )} ...`}</p>
+                  <h2 className="text-[1.2rem] font-bold">
+                    {request.first_name}
+                  </h2>
+                  <p className="text-[0.82rem]">{request.email}</p>
                 </div>
-                <div
-                  onClick={acceptRequest.bind(this, request.id)}
-                  className="text-sm flex bg-slate-400 hover:bg-slate-200 text-slate-900 px-2 py-1 justify-center rounded-full cursor-pointer"
-                >
-                  Accept
-                </div>
+              </div>
+              <div className="ml-auto text-md flex items-center gap-1 bg-slate-200 hover:bg-slate-300 text-slate-900 p-2 justify-center rounded-lg cursor-pointer">
+                <XCircleIcon className="w-6 h-6" />
+                <p>Delete</p>
               </div>
             </div>
           ))}
