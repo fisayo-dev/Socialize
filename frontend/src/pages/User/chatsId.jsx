@@ -2,39 +2,42 @@ import {  useParams } from "react-router-dom";
 import { FaUser, FaExclamation, FaImage } from "react-icons/fa6";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
+import {UserCircleIcon, PhotoIcon, PaperAirplaneIcon} from '@heroicons/react/24/outline'
+
+// const testing_id = 66f35df2be7529d05112a81a
 
 const ChatsId = () => {
   const { id } = useParams();
   const { user } = useAuth();
-  // const userId = user.userId;
-  const [loggedUser, setLoggedUser] = useState();
+  const userId = user.userId;
+  const [currentChattingUser, setCurrentChattingUser] = useState();
 
   const fetchUser = async () => {
     try {
-      const res = await fetch(`/api/users/`);
+      const res = await fetch(`/api/users/${id}`);
       const data = await res.json();
-      setLoggedUser(data);
+      setCurrentChattingUser(data);
     } catch (err) {
       console.log(err)
     }
   };
 
-  // useEffect(() => {
-  //   fetchUser()
-  // }, [id,userId]);
+  useEffect(() => {
+    fetchUser()
+  }, [id,userId]);
 
   return (
     <>
       <div className="chats-msg-grid h-[100vh]">
         <div className="bg-transparent border-b border-slate-500 px-8 py-3">
           <div className="flex justify-between items-center">
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-1 items-center">
               <div className="text-2xl ">
-                <FaUser />
+                <UserCircleIcon className="h-10 w-10"/>
               </div>
-              <div className="">
-                <h2 className="text-2xl font-bold">Fisayo</h2>
-                <p className="text-sm">email@gmail.com</p>
+              <div>
+                <h2 className="text-2xl font-bold">{currentChattingUser && currentChattingUser.first_name}</h2>
+                <p className="text-sm">{currentChattingUser && currentChattingUser.email}</p>
               </div>
             </div>
             <div className="flex gap-2 items-center">
@@ -87,8 +90,8 @@ const ChatsId = () => {
         </div>
         <div className="bg-transparent px-8 py-4">
           <div className="flex text-[0.98rem] items-center chat-input-field  rounded-lg py-3 text-slate-400 bg-slate-800">
-            <div className="px-4 ">
-              <FaImage />
+            <div className="px-4 hover:text-slate-200  cursor-pointer">
+              <PhotoIcon className="w-7 h-7"/>
             </div>
             <div className="w-full">
               <input
@@ -97,8 +100,8 @@ const ChatsId = () => {
                 className="text-slate-200 w-full"
               />
             </div>
-            <div className="px-4 hover:font-bold cursor-pointer rounded-lg bg-slate-800">
-              Send
+            <div className="px-4 hover:text-slate-200 cursor-pointer">
+              <PaperAirplaneIcon className="w-7 h-7"/>
             </div>
           </div>
         </div>
