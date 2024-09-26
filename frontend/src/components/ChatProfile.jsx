@@ -11,7 +11,7 @@ const ChatProfile = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch(`/api/users/${userId}`);
+      const res = await fetch(`${id ? `/api/users/${id}`: `/api/users/${userId}`}`);
       const data = await res.json();
       setLoggedUser(data);
     } catch (err) {
