@@ -129,7 +129,7 @@ const Signup = () => {
       } else {
         Swal.fire({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
           text: data.message,
           icon: 'error',
@@ -140,7 +140,7 @@ const Signup = () => {
     } catch (err) {
       Swal.fire({
         toast: true,
-        position: 'top-end',
+        position: 'bottom-end',
         showConfirmButton: false,
         text: "Couldn't connect to database",
         icon: 'error',
