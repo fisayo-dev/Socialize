@@ -14,6 +14,7 @@ import {
   IdentificationIcon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const Signup = () => {
   // context import
@@ -126,10 +127,26 @@ const Signup = () => {
       if (data.token) {
         login(data.token);
       } else {
-        console.error("Login failed");
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          text: data.message,
+          icon: 'error',
+          timer: 3500,
+          timerProgressBar: true,
+        })
       }
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        text: "Couldn't connect to database",
+        icon: 'error',
+        timer: 3500,
+        timerProgressBar: true,
+      })
     }
     setLoading(false);
   };
