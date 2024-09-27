@@ -47,7 +47,7 @@ const Login = () => {
       } else {
         Swal.fire({
           toast: true,
-          position: 'top-end',
+          position: 'bottom-end',
           showConfirmButton: false,
           text: data.message,
           icon: 'error',
@@ -58,9 +58,9 @@ const Login = () => {
     } catch (err) {
       Swal.fire({
         toast: true,
-        position: 'top-end',
+        position: 'bottom-end',
         showConfirmButton: false,
-        text: "Couldn't connect to database",
+        text: "Unable to connect to database",
         icon: 'error',
         timer: 3500,
         timerProgressBar: true,
