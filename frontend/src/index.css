@@ -31,7 +31,7 @@ body {
 }
 
 .app-container {
-   @apply container  px-10 mx-auto;
+   @apply container  px-5 mx-auto;
 }
 
 input, select {
