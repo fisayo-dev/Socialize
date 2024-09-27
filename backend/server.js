@@ -14,11 +14,6 @@ const port = process.env.PORT || 7000;
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-// Sample API route
-app.get('/api/', (req, res) => {
-  res.json({ message: "Where Connections Spark and Conversations Thrive!" });
-});
-
 // Routes
 app.use('/api/users', usersRouter)
 app.use('/api/chats', chatsRouter)
