@@ -27,7 +27,6 @@ const SearchUsersCard = ({ setShow }) => {
     try {
       const res = await fetch("/api/users");
       const data = await res.json(res);
-      console.log(data);
       setUsers(data);
       setLoading(false);
     } catch (err) {
@@ -106,7 +105,7 @@ const SearchUsersCard = ({ setShow }) => {
                   <p className="text-sm">{thisUser.email}</p>
                 </div>
                 {thisUser.requests.includes(user.userId) && (
-                  <Button styles="flex items-center gap-2 bg-transparent text-green-200 hover:bg-transparent hover:text-green-400 border-green-600 border-2">
+                  <Button styles="flex items-center gap-2 bg-transparent text-white hover:bg-transparent hover:text-white border-white border-2">
                     <CheckCircleIcon className="h-6 w-6 " />
                     <p>Sent</p>
                   </Button>

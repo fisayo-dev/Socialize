@@ -40,16 +40,19 @@ const ChatSidebar = ({ setShow }) => {
   const [requests, setRequests] = useState([]);
   const [filteredSentRequests, setFilteredSentRequests] = useState([]);
   const [requestingRequests, setRequestingRequests] = useState([]);
-  const [filteredRequestingRequests, setFilteredRequestingRequests] = useState([]);
+  const [filteredRequestingRequests, setFilteredRequestingRequests] = useState(
+    []
+  );
   const [usersRender, setUsersRender] = useState(2);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
-  const [searchRequestingRequestValue, setSearchRequestingRequestValue] = useState("");
+  const [searchRequestingRequestValue, setSearchRequestingRequestValue] =
+    useState("");
   const [isSentRequestOpenId, setIsSentRequestOpenId] = useState();
 
   const searchFriends = () => {
     const listOfFriends = friends.filter((friend) =>
-      friend.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+      friend.first_name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
     );
     setFilteredFriends(listOfFriends);
   };
@@ -63,8 +66,7 @@ const ChatSidebar = ({ setShow }) => {
         },
         body: JSON.stringify({
           userId,
-          
-         }),
+        }),
       });
       const data = await res.json();
       const friendRequests = data.sort(
@@ -87,7 +89,7 @@ const ChatSidebar = ({ setShow }) => {
         },
         body: JSON.stringify({
           userId,
-         }),
+        }),
       });
       const data = await res.json();
       const friendRequests = data.sort(
@@ -101,50 +103,32 @@ const ChatSidebar = ({ setShow }) => {
     }
   };
 
-  // const fetchFriends = async () => {
-  //   try {
-  //     const res = await fetch("/api/users/friends", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ personId: userId }), // Assuming personId is userId
-  //     });
-  //     const friendsData = await res.json();
-  //     setFriends(friendsData);
-  //     setFilteredFriends(friendsData);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  const fetchFriends = async () => {
+    try {
+      const res = await fetch("/api/users/friends", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          personID: userId,
+        }),
+      });
+      const data = await res.json();
+      const friends = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setFriends(friends);
 
-  // const acceptRequest = async (requestingId) => {
-  //   try {
-  //     const res = await fetch("/api/users/friends", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ requestingId, personId: userId }), // Assuming personId is userId
-  //     });
-  //     const newFriendsList = await res.json();
-  //     const newFriendRequestsList = requests.filter(
-  //       (requestUser) => requestUser.id !== requestingId
-  //     );
-
-  //     setFriends(newFriendsList);
-  //     setFilteredFriends(newFriendsList);
-
-  //     setRequests(newFriendRequestsList);
-  //     // No need to setFilteredSentRequests here; useEffect will handle it
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+      setTimeout(fetchFriends, 100);
+    } catch (err) {
+      console.error(err);
+      setTimeout(fetchFriends, 2000);
+    }
+  };
 
   const unsendRequest = async (requestingToFriendID) => {
-   try {
-
+    try {
       const res = await fetch("/api/users/requests/unsend", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -157,23 +141,91 @@ const ChatSidebar = ({ setShow }) => {
       Swal.fire({
         text: data.message,
         toast: true,
-        position: 'top-end',
+        position: "top-end",
         timer: 2000,
         timerProgressBar: true,
-        icon: 'success',
+        icon: "success",
         showConfirmButton: false,
-      })
-   } catch (err) {
-    Swal.fire({
-      text: 'Unable to reach server',
-      toast: true,
-      position: 'top-end',
-      timer: 2000,
-      timerProgressBar: true,
-      icon: 'success',
-      showConfirmButton: false,
-    })
+      });
+    } catch (err) {
+      Swal.fire({
+        text: "Unable to reach server",
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        timerProgressBar: true,
+        icon: "success",
+        showConfirmButton: false,
+      });
     }
+    setIsSentRequestOpenId();
+  };
+
+  const declineRequest = async (requestingFriendID) => {
+    try {
+      const res = await fetch("/api/users/request/decline", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestingFriendID,
+          personID: userId,
+        }),
+      });
+      const data = await res.json();
+      Swal.fire({
+        text: data.message,
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        timerProgressBar: true,
+        icon: "success",
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        text: "Unable to reach server",
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        timerProgressBar: true,
+        icon: "error",
+        showConfirmButton: false,
+      });
+    }
+    setIsSentRequestOpenId();
+  };
+  const acceptRequest = async (requestingFriendID) => {
+    try {
+      const res = await fetch("/api/users/request/accept", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestingFriendID,
+          personID: userId,
+        }),
+      });
+      const data = await res.json();
+      Swal.fire({
+        text: data.message,
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        timerProgressBar: true,
+        icon: "success",
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      Swal.fire({
+        text: "Unable to reach server",
+        toast: true,
+        position: "top-end",
+        timer: 2000,
+        timerProgressBar: true,
+        icon: "error",
+        showConfirmButton: false,
+      });
+    }
+    setIsSentRequestOpenId();
   };
 
   const toggleSentRequestsMenu = (id) => {
@@ -201,6 +253,16 @@ const ChatSidebar = ({ setShow }) => {
       setFilteredSentRequests(filtered);
     }
   }, [requests, searchRequestValue]);
+  useEffect(() => {
+    if (searchRequestValue.trim() === "") {
+      setFilteredFriends(friends);
+    } else {
+      const filtered = friends.filter((friend) =>
+        friend.first_name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredFriends(filtered);
+    }
+  }, [friends, searchValue]);
 
   // New useEffect to handle filtering of requesting requests
   useEffect(() => {
@@ -214,12 +276,13 @@ const ChatSidebar = ({ setShow }) => {
       );
       setFilteredRequestingRequests(filtered);
     }
-  },[requestingRequests,searchRequestingRequestValue])
+  }, [requestingRequests, searchRequestingRequestValue]);
 
   useEffect(() => {
     fetchUser();
+    fetchFriends();
     fetchFriendRequests();
-    fetchRequestingFriendRequests()
+    fetchRequestingFriendRequests();
   }, []);
 
   return (
@@ -281,9 +344,11 @@ const ChatSidebar = ({ setShow }) => {
                 <input
                   type="text"
                   className="w-full"
-                  placeholder="Search your sent requests"
+                  placeholder="Search your requesting requests"
                   value={searchRequestingRequestValue}
-                  onChange={(e) => setSearchRequestingRequestValue(e.target.value)}
+                  onChange={(e) =>
+                    setSearchRequestingRequestValue(e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -396,19 +461,25 @@ const ChatSidebar = ({ setShow }) => {
           filteredFriends.map((friend) => (
             <Link key={friend.id} to={`chats/${friend._id}`}>
               <div
-                className={`cursor-pointer  px-5 py-3 ${
+                className={`cursor-pointer  px-3 py-4 ${
                   id === friend.id ? "bg-slate-800" : "hover:bg-slate-900"
                 } `}
               >
-                <div className="friend-card-grid gap-5 items-center">
+                <div className="flex gap-2 items-center">
                   <div>
-                    <UserCircleIcon className="w-6 h-6" />
+                    <UserCircleIcon className="w-[3rem] h-[3rem]" />
                   </div>
                   <div className="grid w-full">
-                    <h2 className="text-md font-bold">{friend.name}</h2>
-                    <p className="text-[0.72rem]">{friend.email}</p>
+                  <h2 className="text-[1.2rem] font-bold">
+                    {friend.first_name}
+                  </h2>
+                  <p className="text-[0.82rem]">{friend.email}</p>
                   </div>
-                  <FaCircleDot className="text-lg" />
+                  <div
+                  className="bg-slate-800 hover:bg-slate-600 w-7 h-7 rounded-full cursor-pointer"
+                >
+                  <EllipsisHorizontalIcon className="w-7 h-7" />
+                </div>
                 </div>
               </div>
             </Link>
@@ -476,17 +547,14 @@ const ChatSidebar = ({ setShow }) => {
                   <EllipsisHorizontalIcon className="w-7 h-7" />
                 </div>
                 {isSentRequestOpenId == request._id && (
-                  <div className="absolute right-0 mt-20 w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
+                  <div className="absolute right-0 mt-[7.5rem] w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
                     <ul className="">
-                      <li
-                        onClick={unsendRequest.bind(this, request._id)}
-                        className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer"
-                      >
+                      <li onClick={acceptRequest.bind(this, request._id)} className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer">
                         <CheckIcon className="w-6 h-6" />
                         <p>Accept</p>
                       </li>
                       <li
-                        onClick={unsendRequest.bind(this, request._id)}
+                        onClick={declineRequest.bind(this, request._id)}
                         className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer"
                       >
                         <XMarkIcon className="w-6 h-6" />

@@ -9,7 +9,7 @@ const ChatLayout = () => {
       {show && <DarkBg />}
       <ChatSidebar setShow={setShow} />
       <Outlet />
-      <ChatProfile />
+      {/* <ChatProfile /> */}
     </div>
   );
 };

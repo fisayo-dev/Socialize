@@ -2,8 +2,7 @@ import User from '../mongodb/models/user.js'
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv'
-import mongoose  from 'mongoose'
-
+import mongoose from 'mongoose'
 
 dotenv.config()
 
@@ -13,12 +12,25 @@ const getUsers = async (req, res) => {
     const allUsers = await User.find()
     res.status(200).json(allUsers)
 }
-const getFriends = (req, res) => {
-    const personId = parseInt(req.body.personId );
-    // console.log(personId);
-    const fetchedFriends = fakeUsers.filter((user) => user.friends.includes(personId))
-    // console.log(fetchedFriends)
-    res.status(200).json(fetchedFriends)
+const getFriends = async (req, res) => {
+    const { personID } = req.body
+    try {
+        const currentUser = await User.findById(personID);    
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found" });
+        }    
+        const friensdUsers = currentUser.friends;
+        const listOfRequestingUsers = await Promise.all(
+            friensdUsers.map(async (thisId) => {
+                const foundFriend = await User.findById(thisId);
+                return foundFriend;
+            })
+        );
+    
+        res.status(200).json(listOfRequestingUsers);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
 }
 const getFriendRequests = async (req, res) => {
     const { userId } = req.body
@@ -28,24 +40,29 @@ const getFriendRequests = async (req, res) => {
     const totalRequests = await User.find({ requests: { $in: [formattedFriendID] } }) 
     res.status(200).json(totalRequests);
 }
-const acceptRequest = (req, res) => {
-    const personId = req.body.personId
-    const requestingUserId = req.body.requestingId;
+const getRequestingFriendRequests = async (req, res) => {
+    const { userId } = req.body;
 
-    const users = fakeUsers.filter((user) => user.friends.includes(personId))
-
-    const particluarRequestingUser = fakeUsers.find((user) => user.id == requestingUserId)
-    particluarRequestingUser.requests.splice(1, personId)
-
-    // Adding request friend to friend
-    particluarRequestingUser.friends.push(personId)
-
-    // Updating friend
-    particluarRequestingUser.requests.splice(0,personId)
-
-    users.push(particluarRequestingUser)
-    res.status(200).json(users)
+    try {
+        const currentUser = await User.findById(userId);    
+        if (!currentUser) {
+            return res.status(404).json({ message: "User not found" });
+        }    
+        const requestingUsersId = currentUser.requests;
+        const listOfRequestingUsers = await Promise.all(
+            requestingUsersId.map(async (thisId) => {
+                const foundRequestingUser = await User.findById(thisId);
+                return foundRequestingUser;
+            })
+        );
+    
+        res.status(200).json(listOfRequestingUsers);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+    
 }
+
 const getUser = async (req, res) => { 
     const {id} = req.params
     const user = await User.findOne({ _id: id })
@@ -117,8 +134,52 @@ const validateUser = async (req,res) => {
     // Send a JWT to client
     res.json({token})
 }
+
+const declineRequest = async (req, res) => {
+    const { personID, requestingFriendID } = req.body;
+    const user = await User.findById(personID);
+    const user2 = await User.findById(requestingFriendID);
+
+    if (!user) return res.status(404).json({ message: 'User Does not exist' })
+    
+    await User.updateOne({ _id: personID }, { $pull: { requests: requestingFriendID } })
+    res.status(200).json({message: `You have successfully declined request from ${user2.first_name}`})    
+}
+const acceptRequest = async (req, res) => {
+    const { personID, requestingFriendID } = req.body;
+
+    // Checking is user exist
+    const user = await User.findById(personID);
+    const user2 = await User.findById(requestingFriendID);
+    if (!user) return res.status(404).json({ message: 'User Does not exist' })
+    
+    // Remove request person id from requests person list
+    await User.updateOne({ _id: personID }, { $pull: { requests: requestingFriendID } })
+    
+    // Add friend to the this person
+    await User.updateOne({ _id: personID }, {
+        $addToSet: { friends: requestingFriendID }
+    })
+    // Add this person to his friend
+    await User.updateOne({ _id: requestingFriendID}, {
+        $addToSet: { friends: personID }
+    })
+    // In essence creating both friends
+        
+    res.status(200).json({message: `${user2.first_name} has been successfully added as your friend`})
+}
+
+const unsendRequest = async (req,res) => {
+    const { personID, requestingPersonID } = req.body;
+    const user = await User.findById(personID)
+    if (!user) {
+        return res.status(404).json({message: `User with id ${id} not found`})
+    }
+    await User.updateOne({ _id: personID }, { $pull: { requests: requestingPersonID } })
+    res.status(200).json({message: 'Request has been succesfully canceled.'})    
+}
 const updateUser = (req, res) => {}
 const deleteUser = (req, res) => {}
 
-export { getUser, getUsers, createUser, validateUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest, sendRequest }
+export { getUser, getUsers, createUser, validateUser, updateUser, deleteUser, getFriends, getFriendRequests, getRequestingFriendRequests, acceptRequest, sendRequest, unsendRequest, declineRequest }
 
