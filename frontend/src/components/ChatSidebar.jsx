@@ -131,9 +131,7 @@ const ChatSidebar = ({ setShow }) => {
 
   useEffect(() => {
     fetchUser();
-    // fetchFriends();
     fetchFriendRequests();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
