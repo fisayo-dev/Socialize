@@ -34,29 +34,24 @@ const ChatSidebar = ({ setShow }) => {
       console.log(err);
     }
   };
-
+  // Actual
   const [friends, setFriends] = useState([]);
-  const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
-  const [filteredSentRequests, setFilteredSentRequests] = useState([]);
   const [requestingRequests, setRequestingRequests] = useState([]);
+  // Filtered
+  const [filteredFriends, setFilteredFriends] = useState([]);
+  const [filteredSentRequests, setFilteredSentRequests] = useState([]);
   const [filteredRequestingRequests, setFilteredRequestingRequests] = useState(
     []
   );
-  const [usersRender, setUsersRender] = useState(2);
+  const [usersRender, setUsersRender] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
   const [searchRequestingRequestValue, setSearchRequestingRequestValue] =
     useState("");
   const [isSentRequestOpenId, setIsSentRequestOpenId] = useState();
 
-  const searchFriends = () => {
-    const listOfFriends = friends.filter((friend) =>
-      friend.first_name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
-    );
-    setFilteredFriends(listOfFriends);
-  };
-
+  
   const fetchFriendRequests = async () => {
     try {
       const res = await fetch("/api/users/requests", {
@@ -236,10 +231,6 @@ const ChatSidebar = ({ setShow }) => {
     }
   };
 
-  useEffect(() => {
-    searchFriends();
-  }, [searchValue, friends]);
-
   // New useEffect to handle filtering of sent requests
   useEffect(() => {
     if (searchRequestValue.trim() === "") {
@@ -253,8 +244,9 @@ const ChatSidebar = ({ setShow }) => {
       setFilteredSentRequests(filtered);
     }
   }, [requests, searchRequestValue]);
+
   useEffect(() => {
-    if (searchRequestValue.trim() === "") {
+    if (searchValue.trim() === "") {
       setFilteredFriends(friends);
     } else {
       const filtered = friends.filter((friend) =>
