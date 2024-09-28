@@ -7,14 +7,16 @@ import {
   PlusIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
-  ArrowUturnLeftIcon,
   EllipsisHorizontalIcon,
+  XMarkIcon,
+  CheckIcon,
 } from "@heroicons/react/24/outline";
 import NoFriends from "../assets/no_friends.svg";
 import RequestFriends from "../assets/request_friends.svg";
 import NoRequest from "../assets/no_requests.svg";
 import { Button } from "../components";
-import { FaCircleDot } from "react-icons/fa6"; // Ensure you have this import
+import { FaCircleDot } from "react-icons/fa6";
+import Swal from "sweetalert2";
 
 const ChatSidebar = ({ setShow }) => {
   const { id } = useParams();
@@ -37,9 +39,12 @@ const ChatSidebar = ({ setShow }) => {
   const [filteredFriends, setFilteredFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [filteredSentRequests, setFilteredSentRequests] = useState([]);
-  const [usersRender, setUsersRender] = useState(1);
+  const [requestingRequests, setRequestingRequests] = useState([]);
+  const [filteredRequestingRequests, setFilteredRequestingRequests] = useState([]);
+  const [usersRender, setUsersRender] = useState(2);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
+  const [searchRequestingRequestValue, setSearchRequestingRequestValue] = useState("");
   const [isSentRequestOpenId, setIsSentRequestOpenId] = useState();
 
   const searchFriends = () => {
@@ -56,7 +61,10 @@ const ChatSidebar = ({ setShow }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({
+          userId,
+          
+         }),
       });
       const data = await res.json();
       const friendRequests = data.sort(
@@ -70,49 +78,105 @@ const ChatSidebar = ({ setShow }) => {
       setTimeout(fetchFriendRequests, 2000);
     }
   };
-
-  const fetchFriends = async () => {
+  const fetchRequestingFriendRequests = async () => {
     try {
-      const res = await fetch("/api/users/friends", {
+      const res = await fetch("/api/users/requests/requesting", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ personId: userId }), // Assuming personId is userId
+        body: JSON.stringify({
+          userId,
+         }),
       });
-      const friendsData = await res.json();
-      setFriends(friendsData);
-      setFilteredFriends(friendsData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const acceptRequest = async (requestingId) => {
-    try {
-      const res = await fetch("/api/users/friends", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ requestingId, personId: userId }), // Assuming personId is userId
-      });
-      const newFriendsList = await res.json();
-      const newFriendRequestsList = requests.filter(
-        (requestUser) => requestUser.id !== requestingId
+      const data = await res.json();
+      const friendRequests = data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
+      setRequestingRequests(friendRequests);
 
-      setFriends(newFriendsList);
-      setFilteredFriends(newFriendsList);
-
-      setRequests(newFriendRequestsList);
-      // No need to setFilteredSentRequests here; useEffect will handle it
+      setTimeout(fetchRequestingFriendRequests, 100);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const openSentRequestsMenu = (id) => {
+  // const fetchFriends = async () => {
+  //   try {
+  //     const res = await fetch("/api/users/friends", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ personId: userId }), // Assuming personId is userId
+  //     });
+  //     const friendsData = await res.json();
+  //     setFriends(friendsData);
+  //     setFilteredFriends(friendsData);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // const acceptRequest = async (requestingId) => {
+  //   try {
+  //     const res = await fetch("/api/users/friends", {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ requestingId, personId: userId }), // Assuming personId is userId
+  //     });
+  //     const newFriendsList = await res.json();
+  //     const newFriendRequestsList = requests.filter(
+  //       (requestUser) => requestUser.id !== requestingId
+  //     );
+
+  //     setFriends(newFriendsList);
+  //     setFilteredFriends(newFriendsList);
+
+  //     setRequests(newFriendRequestsList);
+  //     // No need to setFilteredSentRequests here; useEffect will handle it
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const unsendRequest = async (requestingToFriendID) => {
+   try {
+
+      const res = await fetch("/api/users/requests/unsend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          personID: requestingToFriendID,
+          requestingPersonID: userId,
+        }),
+      });
+      const data = await res.json();
+      Swal.fire({
+        text: data.message,
+        toast: true,
+        position: 'top-end',
+        timer: 2000,
+        timerProgressBar: true,
+        icon: 'success',
+        showConfirmButton: false,
+      })
+   } catch (err) {
+    Swal.fire({
+      text: 'Unable to reach server',
+      toast: true,
+      position: 'top-end',
+      timer: 2000,
+      timerProgressBar: true,
+      icon: 'success',
+      showConfirmButton: false,
+    })
+    }
+  };
+
+  const toggleSentRequestsMenu = (id) => {
     if (!isSentRequestOpenId) {
       setIsSentRequestOpenId(id);
     } else {
@@ -138,9 +202,24 @@ const ChatSidebar = ({ setShow }) => {
     }
   }, [requests, searchRequestValue]);
 
+  // New useEffect to handle filtering of requesting requests
+  useEffect(() => {
+    if (searchRequestingRequestValue.trim() === "") {
+      setFilteredRequestingRequests(requestingRequests);
+    } else {
+      const filtered = requestingRequests.filter((request) =>
+        request.first_name
+          .toLowerCase()
+          .includes(searchRequestingRequestValue.toLowerCase())
+      );
+      setFilteredRequestingRequests(filtered);
+    }
+  },[requestingRequests,searchRequestingRequestValue])
+
   useEffect(() => {
     fetchUser();
     fetchFriendRequests();
+    fetchRequestingFriendRequests()
   }, []);
 
   return (
@@ -195,6 +274,20 @@ const ChatSidebar = ({ setShow }) => {
               </div>
             </div>
           )}
+          {usersRender === 2 && (
+            <div className="bg-slate-800 rounded-lg p-3 text-[0.87rem]">
+              <div className="flex items-center gap-2">
+                <MagnifyingGlassIcon className="w-6 h-6" />
+                <input
+                  type="text"
+                  className="w-full"
+                  placeholder="Search your sent requests"
+                  value={searchRequestingRequestValue}
+                  onChange={(e) => setSearchRequestingRequestValue(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex justify-start gap-5 items-center py-1">
           <h2
@@ -212,6 +305,14 @@ const ChatSidebar = ({ setShow }) => {
             onClick={() => setUsersRender(1)}
           >
             Sent
+          </h2>
+          <h2
+            className={`cursor-pointer ${
+              usersRender === 2 && "border-b-2 border-slate-200 font-bold"
+            } hover:font-bold`}
+            onClick={() => setUsersRender(2)}
+          >
+            Requesting
           </h2>
         </div>
       </div>
@@ -265,6 +366,30 @@ const ChatSidebar = ({ setShow }) => {
             </div>
           )
         )}
+        {usersRender === 2 && requestingRequests.length === 0 ? (
+          <div className="grid gap-5 text-center py-5 font-bold">
+            <img
+              src={RequestFriends}
+              className="w-2/6 mx-auto"
+              alt="Request Friends"
+              draggable={false}
+            />
+            <p>No requests from anyone</p>
+          </div>
+        ) : (
+          usersRender === 2 &&
+          filteredRequestingRequests.length === 0 && (
+            <div className="grid gap-5 text-center py-5 font-bold">
+              <img
+                src={NoRequest}
+                className="w-3/5 mx-auto"
+                alt="No Request"
+                draggable={false}
+              />
+              <p>Couldn't find request</p>
+            </div>
+          )
+        )}
 
         {usersRender === 0 &&
           filteredFriends.length !== 0 &&
@@ -307,16 +432,65 @@ const ChatSidebar = ({ setShow }) => {
                 </div>
                 <div
                   className="bg-slate-800 hover:bg-slate-600 w-7 h-7 rounded-full cursor-pointer"
-                  onClick={openSentRequestsMenu.bind(this, request._id)}
+                  onClick={toggleSentRequestsMenu.bind(this, request._id)}
                 >
                   <EllipsisHorizontalIcon className="w-7 h-7" />
                 </div>
                 {isSentRequestOpenId == request._id && (
                   <div className="absolute right-0 mt-20 w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
                     <ul className="">
-                      <li className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer">
-                        <ArrowUturnLeftIcon className="w-6 h-6" />
+                      <li
+                        onClick={unsendRequest.bind(this, request._id)}
+                        className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer"
+                      >
+                        <XMarkIcon className="w-6 h-6" />
                         <p>Unsend</p>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        {usersRender === 2 &&
+          filteredRequestingRequests.length !== 0 &&
+          filteredRequestingRequests.map((request) => (
+            <div
+              key={request._id}
+              className="cursor-pointer grid gap-1 hover:bg-gray-900 px-3 py-4"
+            >
+              <div className="flex gap-2 items-center">
+                <div>
+                  <UserCircleIcon className="w-[3rem] h-[3rem]" />
+                </div>
+                <div className="grid w-full">
+                  <h2 className="text-[1.2rem] font-bold">
+                    {request.first_name}
+                  </h2>
+                  <p className="text-[0.82rem]">{request.email}</p>
+                </div>
+                <div
+                  className="bg-slate-800 hover:bg-slate-600 w-7 h-7 rounded-full cursor-pointer"
+                  onClick={toggleSentRequestsMenu.bind(this, request._id)}
+                >
+                  <EllipsisHorizontalIcon className="w-7 h-7" />
+                </div>
+                {isSentRequestOpenId == request._id && (
+                  <div className="absolute right-0 mt-20 w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
+                    <ul className="">
+                      <li
+                        onClick={unsendRequest.bind(this, request._id)}
+                        className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer"
+                      >
+                        <CheckIcon className="w-6 h-6" />
+                        <p>Accept</p>
+                      </li>
+                      <li
+                        onClick={unsendRequest.bind(this, request._id)}
+                        className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer"
+                      >
+                        <XMarkIcon className="w-6 h-6" />
+                        <p>Decline</p>
                       </li>
                     </ul>
                   </div>
