@@ -82,7 +82,7 @@ const createUser = async (req, res) => {
     }
 }
 
-const createFriends = async (req,res) => {
+const sendRequest = async (req,res) => {
     const { userId, friendId } = req.body;
 
     // Getting requesting to friend
@@ -120,5 +120,5 @@ const validateUser = async (req,res) => {
 const updateUser = (req, res) => {}
 const deleteUser = (req, res) => {}
 
-export { getUser, getUsers, createUser, validateUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest, createFriends }
+export { getUser, getUsers, createUser, validateUser, updateUser, deleteUser, getFriends, getFriendRequests, acceptRequest, sendRequest }
 
