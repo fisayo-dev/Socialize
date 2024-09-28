@@ -40,6 +40,7 @@ const ChatSidebar = ({ setShow }) => {
   const [usersRender, setUsersRender] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [searchRequestValue, setSearchRequestValue] = useState("");
+  const [isSentRequestOpenId, setIsSentRequestOpenId] = useState();
 
   const searchFriends = () => {
     const listOfFriends = friends.filter((friend) =>
@@ -108,6 +109,14 @@ const ChatSidebar = ({ setShow }) => {
       // No need to setFilteredSentRequests here; useEffect will handle it
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const openSentRequestsMenu = (id) => {
+    if (!isSentRequestOpenId) {
+      setIsSentRequestOpenId(id);
+    } else {
+      setIsSentRequestOpenId();
     }
   };
 
@@ -296,17 +305,22 @@ const ChatSidebar = ({ setShow }) => {
                   </h2>
                   <p className="text-[0.82rem]">{request.email}</p>
                 </div>
-                <div className="bg-slate-800 hover:bg-slate-600 w-7 h-7 rounded-full cursor-pointer">
+                <div
+                  className="bg-slate-800 hover:bg-slate-600 w-7 h-7 rounded-full cursor-pointer"
+                  onClick={openSentRequestsMenu.bind(this, request._id)}
+                >
                   <EllipsisHorizontalIcon className="w-7 h-7" />
-                  <div className="absolute right-0 mt-1 w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
+                </div>
+                {isSentRequestOpenId == request._id && (
+                  <div className="absolute right-0 mt-20 w-48 app-bg-color border border-slate-700 rounded-lg overflow-hidden shadow-lg z-10">
                     <ul className="">
                       <li className="flex items-center gap-1 px-4 py-2 hover:bg-slate-800 cursor-pointer">
-                      <ArrowUturnLeftIcon className="w-6 h-6"/>
-                       <p>Unsend</p>
+                        <ArrowUturnLeftIcon className="w-6 h-6" />
+                        <p>Unsend</p>
                       </li>
                     </ul>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           ))}
