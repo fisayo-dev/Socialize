@@ -2,7 +2,7 @@
 
 .chats-app-flex {
     display: grid;
-    grid-template-columns: 2.5fr 7fr 2.5fr;
+    grid-template-columns: 2.5fr 7fr;
 }
 
 .side-bar-grid {
