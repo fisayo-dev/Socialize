@@ -129,24 +129,24 @@ const Signup = () => {
       } else {
         Swal.fire({
           toast: true,
-          position: 'bottom-end',
+          position: "bottom-end",
           showConfirmButton: false,
           text: data.message,
-          icon: 'error',
+          icon: "error",
           timer: 3500,
           timerProgressBar: true,
-        })
+        });
       }
     } catch (err) {
       Swal.fire({
         toast: true,
-        position: 'bottom-end',
+        position: "bottom-end",
         showConfirmButton: false,
         text: "Couldn't connect to database",
-        icon: 'error',
+        icon: "error",
         timer: 3500,
         timerProgressBar: true,
-      })
+      });
     }
     setLoading(false);
   };
@@ -278,7 +278,7 @@ const Signup = () => {
                   </div>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                    <IdentificationIcon className="w-6 h-6" />
+                      <IdentificationIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="text"
@@ -302,7 +302,7 @@ const Signup = () => {
                   </div>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                    <UserGroupIcon className="w-6 h-6" />
+                      <UserGroupIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="text"
@@ -328,7 +328,7 @@ const Signup = () => {
                 <div className={`${formPhase == 1 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                     <UsersIcon className="w-6 h-6"/>
+                      <UsersIcon className="w-6 h-6" />
                       <select
                         name=""
                         id=""
@@ -356,7 +356,7 @@ const Signup = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                    <GlobeEuropeAfricaIcon className="w-6 h-6"/>
+                      <GlobeEuropeAfricaIcon className="w-6 h-6" />
                       <select
                         name=""
                         id="#dede"
@@ -387,7 +387,7 @@ const Signup = () => {
                 <div className={`${formPhase == 2 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid-gap-2">
                     <div className="form-styles">
-                    <CalendarIcon className="w-6 h-6"/>
+                      <CalendarIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="date"
@@ -412,7 +412,7 @@ const Signup = () => {
                 <div className={`${formPhase == 3 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                    <EnvelopeIcon className="w-6 h-6"/>
+                      <EnvelopeIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type="email"
@@ -433,7 +433,7 @@ const Signup = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                    <KeyIcon className="w-6 h-6"/>
+                      <KeyIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type={showPassword ? "text" : "password"}
@@ -451,7 +451,11 @@ const Signup = () => {
                         className="cursor-pointer"
                         onClick={() => setShowPassword((prev) => !prev)}
                       >
-                        {showPassword ? <EyeIcon className="w-6 h-6"/> :<EyeSlashIcon className="w-6 h-6"/>}
+                        {showPassword ? (
+                          <EyeIcon className="w-6 h-6" />
+                        ) : (
+                          <EyeSlashIcon className="w-6 h-6" />
+                        )}
                       </div>
                     </div>
                     {passwordStatus && (
@@ -464,7 +468,7 @@ const Signup = () => {
                 <div className={`${formPhase == 4 ? "grid gap-5" : "hidden"}`}>
                   <div className="grid gap-2">
                     <div className="form-styles">
-                    <KeyIcon className="w-6 h-6"/>
+                      <KeyIcon className="w-6 h-6" />
                       <input
                         className="w-full"
                         type={showConfirmPassword ? "text" : "password"}
@@ -481,7 +485,11 @@ const Signup = () => {
                         className="cursor-pointer"
                         onClick={() => setShowConfirmPassword((prev) => !prev)}
                       >
-                        {showConfirmPassword ? <EyeIcon className="w-6 h-6" /> : <EyeSlashIcon className="w-6 h-6"/>}
+                        {showConfirmPassword ? (
+                          <EyeIcon className="w-6 h-6" />
+                        ) : (
+                          <EyeSlashIcon className="w-6 h-6" />
+                        )}
                       </div>
                     </div>
                     {confirmPasswordStatus && (

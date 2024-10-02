@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <div className="bottom-0 w-full">
       <div className="app-container backdrop-blur-md ">
-        <div className="py-10 items-center justify-cente r justify-items-center gap-3 md:gap-10 grid md:flex">
+        <div className="py-10 items-center justify-center justify-items-center gap-3 md:gap-10 grid md:flex">
           <h1 className="font-bold">All rights reserved </h1>
           <div className="flex gap-6 items-center">
             <p>Developer</p>
