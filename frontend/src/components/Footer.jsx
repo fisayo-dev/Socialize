@@ -11,16 +11,16 @@ const Footer = () => {
           <div className="flex gap-6 items-center">
             <div className="flex gap-2 items-center">
               <Link to="https://www.x.com">
-                <FaXTwitter className="w-6 h-6" />
+                <FaXTwitter className="md:w-6 md:h-6 w-5 h-5" />
               </Link>
               <Link to="https://www.web.facebook.com">
-                <FaFacebookF className="w-6 h-6" />
+                <FaFacebookF className="md:w-6 md:h-6 w-5 h-5" />
               </Link>
               <Link to="https://www.github.com">
-                <FaGithub className="w-6 h-6" />
+                <FaGithub className="md:w-6 md:h-6 w-5 h-5" />
               </Link>
               <Link to="https://www.dailydev.app">
-                <SiDailydotdev className="w-6 h-6" />
+                <SiDailydotdev className="md:w-6 md:h-6 w-5 h-5" />
               </Link>
             </div>
           </div>
