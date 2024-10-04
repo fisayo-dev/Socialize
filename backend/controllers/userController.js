@@ -95,7 +95,7 @@ const createUser = async (req, res) => {
         // Return the token to the client
         res.status(201).json({ token });
     } catch (err) {
-        res.status(500).json({ error: 'Error registering user' });
+        res.status(500).json({ message: 'Error registering user' });
     }
 }
 

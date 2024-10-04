@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import {EnvelopeIcon, EyeSlashIcon, KeyIcon, EyeIcon} from '@heroicons/react/24/outline'
+import {
+  EnvelopeIcon,
+  EyeSlashIcon,
+  KeyIcon,
+  EyeIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components";
 import { useAuth } from "../../context/AuthContext";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { user, setLoading, login } = useAuth();
@@ -13,7 +18,7 @@ const Login = () => {
     if (user) {
       navigate("/chats");
     }
-  }, [user,navigate]);
+  }, [user, navigate]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,28 +52,28 @@ const Login = () => {
       } else {
         Swal.fire({
           toast: true,
-          position: 'bottom-end',
+          position: "bottom-end",
           showConfirmButton: false,
           text: data.message,
-          icon: 'error',
+          icon: "error",
           timer: 3500,
           timerProgressBar: true,
-        })
+        });
       }
     } catch (err) {
       Swal.fire({
         toast: true,
-        position: 'bottom-end',
+        position: "bottom-end",
         showConfirmButton: false,
         text: "Unable to connect to database",
-        icon: 'error',
+        icon: "error",
         timer: 3500,
         timerProgressBar: true,
-      })
+      });
       // How are you doing today
     }
     setLoading(false);
-  }
+  };
   return (
     <div className="app-container">
       <Link
@@ -110,7 +115,7 @@ const Login = () => {
                 </div>
                 <div className="grid gap-2">
                   <div className="form-styles">
-                  <KeyIcon className="w-6 h-6" />
+                    <KeyIcon className="w-6 h-6" />
                     <input
                       className="w-full"
                       type={showPassword ? "text" : "password"}
@@ -128,7 +133,11 @@ const Login = () => {
                       className="cursor-pointer"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
-                      {showPassword ? <EyeIcon className="w-6 h-6" /> : <EyeSlashIcon className="w-6 h-6" />}
+                      {showPassword ? (
+                        <EyeIcon className="w-6 h-6" />
+                      ) : (
+                        <EyeSlashIcon className="w-6 h-6" />
+                      )}
                     </div>
                   </div>
                   {passwordStatus && (
@@ -154,6 +163,6 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}; 
+  );
+};
 export default Login;

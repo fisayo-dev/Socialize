@@ -142,7 +142,7 @@ const Signup = () => {
         toast: true,
         position: "bottom-end",
         showConfirmButton: false,
-        text: "Couldn't connect to database",
+        text: "Unable to connect to database",
         icon: "error",
         timer: 3500,
         timerProgressBar: true,
