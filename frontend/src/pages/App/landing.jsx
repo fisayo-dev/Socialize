@@ -19,7 +19,7 @@ const Landing = () => {
         <div className="grid justify-items-center place-items-center h-full px-4 md:px-10">
           <div className="mx-auto  md:w-4/5 gap-4 grid text-center justify-items-center">
             <h2 className="text-4xl md:text-5xl font-bold">
-              Where Connections Spark &nbsp;and &nbsp; Conversations Thrive!
+              Where Connections Spark and Conversations Thrive!
             </h2>
             <p className="text-1xl">
               Get in touch with your friends and families from any distance.
