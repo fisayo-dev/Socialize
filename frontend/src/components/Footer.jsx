@@ -7,14 +7,21 @@ const Footer = () => {
       <div className="app-container backdrop-blur-md ">
         <div className="py-10 items-center justify-center justify-items-center gap-3 md:gap-10 grid md:flex">
           <h1 className="font-bold">All rights reserved </h1>
+          <p>Fisayo Obadina</p>
           <div className="flex gap-6 items-center">
-            <p>Developer</p>
-            <p>||</p>
             <div className="flex gap-2 items-center">
-              <Link to="https://www.x.com"><FaXTwitter className="w-6 h-6" /></Link>
-              <Link to="https://www.web.facebook.com"><FaFacebookF className="w-6 h-6" /></Link>
-              <Link to="https://www.github.com"><FaGithub className="w-6 h-6" /></Link>
-              <Link to="https://www.dailydev.app"><SiDailydotdev className="w-6 h-6" /></Link>
+              <Link to="https://www.x.com">
+                <FaXTwitter className="w-6 h-6" />
+              </Link>
+              <Link to="https://www.web.facebook.com">
+                <FaFacebookF className="w-6 h-6" />
+              </Link>
+              <Link to="https://www.github.com">
+                <FaGithub className="w-6 h-6" />
+              </Link>
+              <Link to="https://www.dailydev.app">
+                <SiDailydotdev className="w-6 h-6" />
+              </Link>
             </div>
           </div>
         </div>
