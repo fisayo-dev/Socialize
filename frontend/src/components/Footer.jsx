@@ -1,5 +1,6 @@
 import { FaFacebookF, FaXTwitter, FaGithub } from "react-icons/fa6";
-import {SiDailydotdev} from 'react-icons/si'
+import { SiDailydotdev } from "react-icons/si";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="bottom-0 w-full">
@@ -8,12 +9,12 @@ const Footer = () => {
           <h1 className="font-bold">All rights reserved </h1>
           <div className="flex gap-6 items-center">
             <p>Developer</p>
-           <p>||</p>
+            <p>||</p>
             <div className="flex gap-2 items-center">
-              <FaXTwitter className="w-6 h-6" />
-              <FaFacebookF className="w-6 h-6" />
-              <FaGithub className="w-6 h-6" />
-              <SiDailydotdev className="w-8 h-8" />
+              <Link to="https://www.x.com"><FaXTwitter className="w-6 h-6" /></Link>
+              <Link to="https://www.web.facebook.com"><FaFacebookF className="w-6 h-6" /></Link>
+              <Link to="https://www.github.com"><FaGithub className="w-6 h-6" /></Link>
+              <Link to="https://www.dailydev.app"><SiDailydotdev className="w-6 h-6" /></Link>
             </div>
           </div>
         </div>
