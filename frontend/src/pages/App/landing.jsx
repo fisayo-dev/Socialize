@@ -29,7 +29,7 @@ const Landing = () => {
                 <Button styles="app-dark-text-color ">Get Started</Button>
               </Link>
               <Link to="/login">
-                <Button styles="bg-transparent hover:bg-slate-900 border-2 border-slate-200 app-text-color ">Go to account</Button>
+                <Button styles="bg-transparent hover:bg-slate-900 border-2 border-slate-200 app-text-color ">Login</Button>
               </Link>
             </div>
             <div className="my-5 w-full grid justify-items-center h-[20rem] md:h-[40rem] ">
