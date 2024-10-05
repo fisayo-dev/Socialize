@@ -3,7 +3,7 @@ import usersRouter from './routes/usersRouter.js'
 import chatsRouter from './routes/chatsRouter.js'
 import connectDB from './mongodb/connect.js';
 import dotenv from 'dotenv'
-import cors from 'cors'
+import cors from 'cors';
  
 dotenv.config()
 
