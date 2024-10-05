@@ -3,6 +3,7 @@ import usersRouter from './routes/usersRouter.js'
 import chatsRouter from './routes/chatsRouter.js'
 import connectDB from './mongodb/connect.js';
 import dotenv from 'dotenv'
+import cors from 'cors'
  
 dotenv.config()
 
@@ -17,6 +18,12 @@ app.use(express.urlencoded({ extended: false }))
 // Routes
 app.use('/api/users', usersRouter)
 app.use('/api/chats', chatsRouter)
+
+// CORS
+app.use(cors({
+  origin: 'https://websocialize.vercel.app', // Replace with your Vercel domain
+  credentials: true
+}));
 
 
 try {
