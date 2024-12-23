@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+// const VITE_APP_API_URL = 'dd'
 
 // https://vitejs.dev/config/
 export default defineConfig({
